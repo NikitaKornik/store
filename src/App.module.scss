@@ -1,0 +1,13 @@
+body {
+  background-color: var(--color-bg);
+  color: white;
+}
+
+.root {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  margin: 30px;
+  box-sizing: border-box;
+  width: auto;
+  height: 100vh;
+}
