@@ -2,7 +2,7 @@ import React from "react";
 import s from "./Btn.module.scss";
 import cn from "classnames";
 
-function Btn({ children, disable, color, onClickFunc }) {
+function Btn({ children, icon, disable, color, onClickFunc }) {
   return (
     <button
       onClick={disable ? undefined : onClickFunc}
@@ -12,9 +12,19 @@ function Btn({ children, disable, color, onClickFunc }) {
         [s.primary]: color === "primary",
         [s.secondary]: color === "secondary",
         [s.danger]: color === "danger",
+        [s.clear]: color === "clear",
       })}
     >
       {children && children}
+      {icon && (
+        <span
+          className={cn(s.svg, {
+            [s.svgWithText]: children,
+          })}
+        >
+          {icon}
+        </span>
+      )}
     </button>
   );
 }

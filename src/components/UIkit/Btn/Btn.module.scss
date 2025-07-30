@@ -1,9 +1,9 @@
 .root {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   border: none;
-  padding: 14px 22px;
+  padding: 0px 14px;
   height: 44px;
   min-width: 44px;
   border-radius: 10px;
@@ -26,6 +26,10 @@
 .disable {
   opacity: 0.5;
 }
+.clear {
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .active {
   cursor: pointer;
   position: relative;
@@ -46,4 +50,12 @@
     top: 0;
     filter: brightness(1.15);
   }
+}
+
+.svg {
+  height: 45%;
+}
+
+.svgWithText {
+  margin-left: 10px;
 }
