@@ -4,10 +4,10 @@ body {
 }
 
 .root {
+  margin: 30px auto;
   display: grid;
   grid-template-columns: 20% 80%;
-  margin: 30px;
   box-sizing: border-box;
-  width: auto;
+  width: 1380px;
   height: 100vh;
 }

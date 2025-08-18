@@ -1,0 +1,272 @@
+.root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--color-grey-50);
+
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    color: var(--color-text);
+  }
+}
+
+.cartItems {
+  margin-bottom: 30px;
+}
+
+.cartItem {
+  display: grid;
+  grid-template-columns: 120px minmax(300px, 1fr) 120px 100px 60px;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 15px;
+  background-color: var(--color-grey-50);
+  border-radius: 15px;
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  &::after{
+    content: "";
+  }
+}
+
+.itemImage {
+  img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: white;
+  }
+}
+
+.itemInfo {
+  min-width: 0; // Важно для правильного обрезания текста
+
+  .itemTitle {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .itemDesc {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: var(--color-grey-10);
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+.itemPrice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  .price {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .discountedPrice {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .originalPrice {
+    font-size: 14px;
+    color: var(--color-grey-10);
+    text-decoration: line-through;
+  }
+
+  .discountBadge {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+
+.itemQuantity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .quantity {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--color-text);
+  }
+}
+
+.itemTotal {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  min-width: 80px;
+}
+
+.itemActions {
+  display: flex;
+  justify-content: center;
+}
+
+.cartSummary {
+  background-color: var(--color-grey-50);
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.summaryInfo {
+  .summaryRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: var(--color-text);
+
+    &:last-child {
+      margin-bottom: 0;
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  .totalPrice {
+    color: var(--color-primary);
+    font-size: 20px;
+  }
+}
+
+.summaryActions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.loading,
+.error,
+.emptyCart {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text);
+
+  h2 {
+    margin: 0 0 15px 0;
+    font-size: 24px;
+  }
+
+  p {
+    margin: 0 0 25px 0;
+    font-size: 16px;
+    color: var(--color-grey-10);
+  }
+}
+
+.error {
+  color: #e74c3c;
+}
+
+// Адаптивность для планшетов
+@media (max-width: 768px) {
+  .cartItem {
+    grid-template-columns: 100px 1fr;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .itemImage img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .itemQuantity,
+  .itemTotal,
+  .itemActions {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 10px;
+  }
+
+  .cartSummary {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .summaryActions {
+    justify-content: center;
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 480px) {
+  .root {
+    padding: 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+
+    h1 {
+      font-size: 24px;
+    }
+  }
+
+  .cartItem {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .itemImage img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .itemQuantity,
+  .itemTotal,
+  .itemActions {
+    margin-top: 0;
+  }
+
+  .summaryActions {
+    flex-direction: column;
+    width: 100%;
+  }
+}

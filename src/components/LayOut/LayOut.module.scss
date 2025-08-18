@@ -1,9 +1,9 @@
 .root {
   display: flex;
-  justify-content: center;
-  align-items: start;
+  justify-content: start;
+  align-items: center;
   box-sizing: border-box;
-  // width: auto;
+  flex-direction: column;
   height: 100%;
   margin-left: 15px;
 }

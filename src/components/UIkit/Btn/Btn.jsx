@@ -2,7 +2,17 @@ import React from "react";
 import s from "./Btn.module.scss";
 import cn from "classnames";
 
-function Btn({ children, icon, disable, color, onClickFunc }) {
+function Btn({
+  children,
+  icon,
+  disable,
+  color,
+  onClickFunc,
+  size,
+  style,
+  notification,
+  ...props
+}) {
   return (
     <button
       onClick={disable ? undefined : onClickFunc}
@@ -13,7 +23,14 @@ function Btn({ children, icon, disable, color, onClickFunc }) {
         [s.secondary]: color === "secondary",
         [s.danger]: color === "danger",
         [s.clear]: color === "clear",
+        [s.sizeSmall]: size === "small",
+        [s.sizeMiddle]: size === "middle",
+        [s.sizeBig]: size === "big",
+        [s.notification]: notification,
       })}
+      style={style}
+      data-notification={notification}
+      {...props}
     >
       {children && children}
       {icon && (
