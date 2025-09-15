@@ -1,7 +1,7 @@
 .root {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .header {
@@ -20,11 +20,15 @@
 
 .cartItems {
   margin-bottom: 30px;
+
+  & a {
+    text-decoration: none;
+  }
 }
 
 .cartItem {
   display: grid;
-  grid-template-columns: 120px minmax(300px, 1fr) 120px 100px 60px;
+  grid-template-columns: 120px minmax(235px, 1fr) 120px 100px 60px;
   gap: 20px;
   align-items: center;
   padding: 20px;
@@ -32,22 +36,43 @@
   background-color: var(--color-grey-50);
   border-radius: 15px;
   transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  &::after{
+
+  &::after {
     content: "";
   }
 }
 
 .itemImage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 140px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  z-index: 2;
+  box-shadow: 0px 0 0 7px black;
+
   img {
-    width: 100px;
-    height: 100px;
+    z-index: 2;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
     border-radius: 10px;
-    background-color: white;
+    transition: 1s all;
+  }
+
+  img:hover {
+    transform: scale(1.05);
   }
 }
 
@@ -61,6 +86,23 @@
     color: var(--color-text);
     word-wrap: break-word;
     overflow-wrap: break-word;
+    position: relative;
+    display: inline-block;
+
+    &:hover::after {
+      width: 100%;
+    }
+
+    &::after {
+      content: "";
+      transition: all 0.2s;
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: 0;
+      background-color: var(--color-text);
+    }
   }
 
   .itemDesc {
@@ -88,12 +130,6 @@
     font-size: 18px;
     font-weight: 600;
     color: var(--color-text);
-  }
-
-  .discountedPrice {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--color-primary);
   }
 
   .originalPrice {
@@ -145,12 +181,16 @@
   padding: 25px;
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
+  width: 450px;
+  margin: auto;
 }
 
 .summaryInfo {
+  width: 100%;
   .summaryRow {
     display: flex;
     justify-content: space-between;
@@ -180,6 +220,10 @@
 .loading,
 .error,
 .emptyCart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   text-align: center;
   padding: 60px 20px;
   color: var(--color-text);
@@ -269,4 +313,10 @@
     flex-direction: column;
     width: 100%;
   }
+}
+
+.line {
+  background-color: var(--color-grey-10);
+  height: 1px;
+  width: 100%;
 }

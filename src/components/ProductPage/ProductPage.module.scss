@@ -1,5 +1,6 @@
 .root {
   margin: 40px 0px;
+  padding: 0 !important;
   width: 100%;
 }
 
@@ -19,17 +20,20 @@
   flex-direction: column;
   margin-right: 30px;
 }
+
 .title {
   color: var(--color-text);
   font-weight: bold;
   font-size: 30px;
 }
+
 .desc {
   color: var(--color-grey-10);
   font-weight: bold;
   font-size: 15px;
   margin-top: 5px;
 }
+
 .imgContainer {
   height: 500px;
   border-radius: 15px;
@@ -60,23 +64,38 @@
   margin-top: 30px;
   padding: 20px;
   display: flex;
-  justify-content: space-around;
   align-items: center;
   box-sizing: border-box;
-}
-
-.priceAndCurrency {
-  display: flex;
-  justify-content: start;
-  font-weight: bold;
   flex-direction: column;
-  color: var(--color-primary);
 }
 
 .price {
-  font-size: 23px;
+  font-size: 18px;
   margin: 10px 0px;
   position: relative;
+  width: 100%;
+}
+
+
+.priceInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text);
+  margin: 5px 0;
+}
+
+.totalPrice {
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text);
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.totalPricePrimary{
+  color: var(--color-primary);
 }
 
 .originalPrice {
@@ -242,11 +261,14 @@
     padding: 12px;
   }
 
-  .price {
-    font-size: 18px;
-  }
-
   .originalPrice {
     font-size: 14px;
   }
+}
+
+.line {
+  background-color: var(--color-grey-10);
+  height: 1px;
+  width: 100%;
+  margin: 10px 0 10px 0;
 }

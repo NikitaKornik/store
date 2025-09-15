@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
+import { useContext } from "react";
+import { SearchContext } from "../../../context/ContextProvider";
 import s from "./Search.module.scss";
 import { ReactComponent as SearchSvg } from "../../../assets/icons/search.svg";
 
 function Search({ onSearch }) {
-  const [query, setQuery] = useState("");
+  const { query, setQuery } = useContext(SearchContext);
 
   const handleChange = (e) => {
     setQuery(e.target.value);

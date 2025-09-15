@@ -1,7 +1,7 @@
 import { products } from "../data/products";
 import { apiConfig, apiUtils } from "../config/api";
-
 // Имитация задержки сети (только если включена)
+
 const simulateNetworkDelay = async (ms = 500) => {
   if (apiUtils.isNetworkSimulationEnabled()) {
     await new Promise((resolve) => setTimeout(resolve, ms));
@@ -56,6 +56,18 @@ export const productsAPI = {
     }
 
     return apiCall("getAllProducts", products);
+  },
+
+  // Получить продукты по категории (для будущего использования)
+  async getByCategory(category) {
+    // Если мок отключен, здесь будет реальный API вызов
+    if (!apiUtils.isMockEnabled()) {
+      // TODO: Заменить на реальный API вызов
+      // const response = await fetch(apiUtils.buildURL(`/products/category/${category}`));
+      // return response.json();
+    }
+    // Пока возвращаем все продукты, но структура готова для категорий
+    return apiCall("getProductsByCategory", products);
   },
 
   // Получить продукт по ID
@@ -114,19 +126,6 @@ export const productsAPI = {
         totalPages: Math.ceil(total / limit),
       },
     });
-  },
-
-  // Получить продукты по категории (для будущего использования)
-  async getByCategory(category) {
-    // Если мок отключен, здесь будет реальный API вызов
-    if (!apiUtils.isMockEnabled()) {
-      // TODO: Заменить на реальный API вызов
-      // const response = await fetch(apiUtils.buildURL(`/products/category/${category}`));
-      // return response.json();
-    }
-
-    // Пока возвращаем все продукты, но структура готова для категорий
-    return apiCall("getProductsByCategory", products);
   },
 };
 

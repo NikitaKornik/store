@@ -1,6 +1,6 @@
 .root {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border: none;
   padding: 0px 14px;
@@ -14,6 +14,7 @@
   position: relative;
   text-align: center;
 }
+
 .notification::before {
   content: attr(data-notification);
   display: flex;
@@ -32,17 +33,22 @@
 .primary {
   background-color: var(--color-primary);
 }
+
 .secondary {
   background-color: var(--color-secondary);
 }
+
 .danger {
   background-color: var(--color-danger);
 }
+
 .disable {
   opacity: 0.5;
 }
+
 .clear {
   background-color: rgba(0, 0, 0, 0);
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.3);
   }
@@ -54,12 +60,14 @@
   height: 36px;
   min-width: 36px;
 }
+
 .sizeMiddle {
   font-size: 16px;
   padding: 0px 14px;
   height: 44px;
   min-width: 44px;
 }
+
 .sizeBig {
   font-size: 18px;
   padding: 0px 30px;
@@ -76,6 +84,13 @@
 
 .svg {
   height: 45%;
+}
+
+.svgOnly {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
 }
 
 .svgWithText {

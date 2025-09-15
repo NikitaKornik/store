@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
-import s from "./ProductList.module.scss";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useProducts } from "../../hooks/useAPI";
+import { SearchContext } from "../../context/ContextProvider";
 import Product from "../Product/Product";
 import Pagination from "../Pagination/Pagination";
-import { useProducts } from "../../hooks/useAPI";
+import s from "./ProductList.module.scss";
 
 function ProductList() {
   const { products, getAllProducts } = useProducts();
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(12);
+  const { query } = useContext(SearchContext);
 
   useEffect(() => {
     getAllProducts();
@@ -16,13 +19,26 @@ function ProductList() {
   // Вычисляем индексы для текущей страницы
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
+
+  const { category } = useParams();
+  //let filtredProducts = category
+  //? products.filter((product) => product.category === category)
+  //: products;
+  let filtredProducts = category
+    ? products.filter(
+        (product) =>
+          product.title.toLowerCase().includes(query.toLowerCase()) &&
+          product.category === category
+      )
+    : products;
+
+  const currentProducts = filtredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
 
   // Вычисляем общее количество страниц
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(filtredProducts.length / productsPerPage);
 
   // Функция для изменения страницы
   const handlePageChange = (pageNumber) => {
@@ -49,40 +65,47 @@ function ProductList() {
 
   return (
     <>
-      {/* Индикатор страницы и количества товаров */}
-      <div className={s.pageInfo}>
-        <div className={s.pageIndicator}>
-          Страница {currentPage} из {totalPages}
-        </div>
-        <div className={s.productsCount}>
-          Показано {currentProducts.length} из {products.length} товаров
-        </div>
-      </div>
+      {filtredProducts.length > 0 ? (
+        <>
+          <div className={s.pageInfo}>
+            <div className={s.pageIndicator}>
+              Страница {currentPage} из {totalPages}
+            </div>
+            <div className={s.productsCount}>
+              Показано {currentProducts.length} из {filtredProducts.length}{" "}
+              товаров
+            </div>
+          </div>
 
-      <div className={s.root}>
-        {currentProducts.map((product) => (
-          <Product
-            key={product.id}
-            id={product.id}
-            imgUrl={product.imgUrl}
-            title={product.title}
-            desc={product.desc}
-            price={product.price}
-            currency={product.currency}
-            discount={product.discount}
-          />
-        ))}
-      </div>
+          <div className={s.root}>
+            {currentProducts.map((product) => (
+              <Product
+                key={product.id}
+                id={product.id}
+                imgUrl={product.imgUrl}
+                title={product.title}
+                desc={product.desc}
+                price={product.price}
+                currency={product.currency}
+                discount={product.discount}
+              />
+            ))}
+          </div>
 
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          onNextPage={handleNextPage}
-          onPrevPage={handlePrevPage}
-        />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              onNextPage={handleNextPage}
+              onPrevPage={handlePrevPage}
+            />
+          )}
+        </>
+      ) : (
+        <div className={s.emptyPage}>Страница пуста</div>
       )}
+      {/* Индикатор страницы и количества товаров */}
     </>
   );
 }

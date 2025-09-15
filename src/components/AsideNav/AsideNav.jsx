@@ -1,21 +1,38 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import cn from "classnames";
 import s from "./AsideNav.module.scss";
-import { Link } from "react-router-dom";
 
-const catalog = ["Телефоны", "Гарнитуры", "Блоки питания", "Умные часы"];
+const catalog = [
+  { name: "Телефоны", category: "smartphones" },
+  { name: "Гарнитуры", category: "headphones" },
+  { name: "Умные часы", category: "smartwatches" },
+];
 
 function AsideNav() {
+  const { pathname } = useLocation();
+  const parts = pathname.split("/");
+  const category = parts[2];
   return (
     <div className={s.root}>
       <Link className={s.logo}>
         <img src="/img/MobileLend.png" alt="Store Logo" />
       </Link>
-      <div className={s.switchFilterCatalog}></div>
+      <div className={s.switchFilterCatalog}>
+        <span className={cn(s.switchItem, s.active)}>Категории</span>
+        {" | "}
+        <span className={s.switchItem}>Фильтры</span>
+      </div>
       <ul className={s.catalog}>
         {catalog.map((item, index) => {
           return (
-            <li key={index} className={s.catalogItem}>
-              {item}
+            <li
+              key={index}
+              className={cn(s.catalogItem, {
+                [s.active]: item.category === category,
+              })}
+            >
+              <Link to={"products/" + item.category}>{item.name}</Link>
             </li>
           );
         })}

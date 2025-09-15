@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import s from "./Cart.module.scss";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../hooks/useAPI";
 import Btn from "../UIkit/Btn/Btn";
+import s from "./Cart.module.scss";
 import { ReactComponent as TrashSvg } from "../../assets/icons/archive-svgrepo-com.svg";
 
 function Cart() {
@@ -25,7 +25,6 @@ function Cart() {
     }, 0);
     setTotalPrice(total);
   }, [cart]);
-
   // Обработчик изменения количества товара
   const handleQuantityChange = async (productId, newQuantity) => {
     if (newQuantity < 1) return;
@@ -92,7 +91,7 @@ function Cart() {
       {/* Заголовок */}
       <div className={s.header}>
         <Btn
-          onClickFunc={() => navigate("/")}
+          onClickFunc={() => navigate("/products")}
           color="secondary"
           style={{ marginRight: "20px" }}
         >
@@ -100,26 +99,29 @@ function Cart() {
         </Btn>
         <h1>Корзина</h1>
       </div>
-
       {/* Список товаров */}
       <div className={s.cartItems}>
         {cart.map((item) => (
           <div key={item.id} className={s.cartItem}>
             {/* Изображение товара */}
-            <div className={s.itemImage}>
-              <img src={item.imgUrl} alt={item.title} />
-            </div>
+            <Link to={`/products/${item.category}/product/${item.id}`}>
+              <div className={s.itemImage}>
+                <img src={item.imgUrl} alt={item.title} />
+              </div>
+            </Link>
 
             {/* Информация о товаре */}
             <div className={s.itemInfo}>
-              <h3 className={s.itemTitle}>{item.title}</h3>
+              <Link to={`/products/${item.category}/product/${item.id}`}>
+                <h3 className={s.itemTitle}>{item.title}</h3>
+              </Link>
               <p className={s.itemDesc}>{item.desc}</p>
 
               {/* Цена с учетом скидки */}
               <div className={s.itemPrice}>
                 {item.discount ? (
                   <>
-                    <span className={s.discountedPrice}>
+                    <span className={s.price}>
                       {Math.round(item.price * (1 - item.discount / 100))}{" "}
                       {item.currency}
                     </span>
@@ -174,7 +176,7 @@ function Cart() {
             <div className={s.itemActions}>
               <Btn
                 onClickFunc={() => handleRemoveItem(item.id)}
-                color="clear"
+                color="danger"
                 size="small"
                 icon={<TrashSvg />}
               />
@@ -182,7 +184,6 @@ function Cart() {
           </div>
         ))}
       </div>
-
       {/* Итоги корзины */}
       <div className={s.cartSummary}>
         <div className={s.summaryInfo}>
@@ -197,6 +198,8 @@ function Cart() {
             </span>
           </div>
         </div>
+
+        <div className={s.line}></div>
 
         <div className={s.summaryActions}>
           <Btn onClickFunc={() => navigate("/")} color="secondary">

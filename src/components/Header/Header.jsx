@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import s from "./Header.module.scss";
+import { useCart } from "../../hooks/useAPI";
 import Btn from "../UIkit/Btn/Btn";
 import Search from "../UIkit/Search/Search";
+import s from "./Header.module.scss";
 import { ReactComponent as LocateSvg } from "../../assets/icons/location.svg";
 import { ReactComponent as HeartSvg } from "../../assets/icons/heart.svg";
 import { ReactComponent as ShoppingCartSvg } from "../../assets/icons/shoppingCart.svg";
 import { ReactComponent as LanguageSvg } from "../../assets/icons/language.svg";
-import { useCart } from "../../hooks/useAPI";
 
 function Header() {
   const navigate = useNavigate();

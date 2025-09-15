@@ -1,6 +1,6 @@
 import React from "react";
-import s from "./Btn.module.scss";
 import cn from "classnames";
+import s from "./Btn.module.scss";
 
 function Btn({
   children,
@@ -27,6 +27,7 @@ function Btn({
         [s.sizeMiddle]: size === "middle",
         [s.sizeBig]: size === "big",
         [s.notification]: notification,
+        [s.svgOnly]: !children,
       })}
       style={style}
       data-notification={notification}

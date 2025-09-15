@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import s from "./ProductPage.module.scss";
-import Btn from "../UIkit/Btn/Btn";
 import { useProducts } from "../../hooks/useAPI";
+import Btn from "../UIkit/Btn/Btn";
+import s from "./ProductPage.module.scss";
 
 function ProductPage() {
-  const { id } = useParams();
+  const { id, category } = useParams();
   const navigate = useNavigate();
   const { getProductById } = useProducts();
   const [product, setProduct] = useState(null);
@@ -18,7 +18,7 @@ function ProductPage() {
       } catch (err) {
         console.error("Failed to fetch product:", err);
         // Если продукт не найден, перенаправляем на главную
-        navigate("/");
+        navigate(`/products/${category}`);
       }
     };
 
@@ -29,7 +29,7 @@ function ProductPage() {
 
   const handleBackClick = () => {
     console.log("Back button clicked, navigating to /");
-    navigate("/");
+    navigate(`/products/${category}`);
   };
 
   if (!product) {
@@ -60,8 +60,28 @@ function ProductPage() {
             <div>ID prod: {product.id}</div>
           </div>
           <div className={s.payment}>
-            <div className={s.priceAndCurrency}>
-              <div className={s.price}>
+            <div className={s.price}>
+              <div className={s.priceInfo}>
+                <span>Цена</span>
+                <span>{`${product.price} ${product.currency}`}</span>
+              </div>
+              <div className={s.priceInfo}>
+                <span>Скидка</span>
+                <span>{product.discount ? `-${product.discount}%` : 0}</span>
+              </div>
+              <div className={s.line}></div>
+              <div className={s.totalPrice}>
+                <span>Общая стоимость</span>
+                <span className={s.totalPricePrimary}>
+                  {product.discount
+                    ? `${product.price * (1 - product.discount / 100)} ${
+                        product.currency
+                      }`
+                    : `${product.price} ${product.currency}`}
+                </span>
+              </div>
+            </div>
+            {/* <div className={s.price}>
                 {product.discount
                   ? `${product.price * (1 - product.discount / 100)} ${
                       product.currency
@@ -72,11 +92,10 @@ function ProductPage() {
                     {product.price} {product.currency}
                   </span>
                 )}
-              </div>
-              <Btn color="primary" size="big">
-                Купить
-              </Btn>
-            </div>
+              </div> */}
+            <Btn color="primary" size="big">
+              Купить
+            </Btn>
           </div>
         </div>
       </div>

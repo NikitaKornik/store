@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { localApiUtils } from "../services/api";
+import { useParams } from "react-router-dom";
 
 export const useAPI = () => {
   const [loading, setLoading] = useState(false);
@@ -39,6 +40,7 @@ export const useAPI = () => {
 
 // Специализированный хук для продуктов
 export const useProducts = () => {
+  const { category } = useParams();
   const { loading, error, execute, clearError } = useAPI();
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState(null);
@@ -47,7 +49,8 @@ export const useProducts = () => {
   const getAllProducts = useCallback(async () => {
     try {
       const { productsAPI } = await import("../services/api");
-      const data = await execute(productsAPI.getAll);
+      const data = await execute(productsAPI.getByCategory);
+      // const data = await execute(productsAPI.getAll);
       setProducts(data);
       return data;
     } catch (err) {

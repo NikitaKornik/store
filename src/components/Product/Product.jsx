@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import s from "./Product.module.scss";
-import { ReactComponent as ShoppingCartSvg } from "../../assets/icons/shoppingCart.svg";
-import cn from "classnames";
-import Btn from "../UIkit/Btn/Btn";
 import { Link } from "react-router-dom";
 import { useCart } from "../../hooks/useAPI";
+import Btn from "../UIkit/Btn/Btn";
+import s from "./Product.module.scss";
+import { ReactComponent as ShoppingCartSvg } from "../../assets/icons/shoppingCart.svg";
 
 function Product({ imgUrl, title, desc, price, currency, discount, id }) {
   const { addToCart } = useCart();
@@ -26,28 +25,28 @@ function Product({ imgUrl, title, desc, price, currency, discount, id }) {
 
   return (
     <div className={s.root}>
-      <Link to={`/product/${id}`}>
-        <img className={s.img} src={imgUrl} alt="" />
+      <Link to={`product/${id}`}>
+        <div className={s.imgContainer}>
+          <img className={s.img} src={imgUrl} alt="" />
+        </div>
       </Link>
       <div className={s.infoContainer}>
         <div className={s.title}>
-          <Link to={`/product/${id}`}>{title}</Link>
+          <Link to={`product/${id}`}>{title}</Link>
         </div>
 
         <div className={s.desc}>{desc}</div>
         <div className={s.priceAndBtn}>
-          <div
-            className={cn(s.priceContainer, {
-              [s.discount]: discount,
-            })}
-            data-content={price * (1 - discount / 100) + " " + currency}
-          >
-            <span
-              className={s.price}
-              data-content={discount && `-${discount}%`}
-            >
-              {price}
-            </span>
+          <div className={s.priceContainer}>
+            {discount && (
+              <div className={s.discountPrice}>
+                <div
+                  className={s.priceWithoutDiscount}
+                >{`${price}\u00A0${currency}`}</div>
+                <div className={s.discountLabel}>{`-${discount}%`}</div>
+              </div>
+            )}
+            <span>{discount ? price * (1 - discount / 100) + " " : price}</span>
             <span className={s.currency}>{` ${currency}`}</span>
           </div>
           <Btn

@@ -1,9 +1,18 @@
+@import "../../styles/_breakpoints";
+
 .root {
   display: flex;
   justify-content: start;
   align-items: center;
   box-sizing: border-box;
   flex-direction: column;
-  height: 100%;
-  margin-left: 15px;
+  position: absolute;
+  top: 20px;
+  left: 310px;
+  right: 20px;
+  bottom: 20px;
+
+  @media screen and (max-width: $mobile) {
+    margin: 0px 15px;
+  }
 }

@@ -1,15 +1,28 @@
+@import "../../styles/__breakpoints.scss";
+
 .root {
   background-color: var(--color-grey-50);
-  width: auto;
-  height: 500px;
+  width: 270px;
   border-radius: 15px;
   box-sizing: border-box;
-  margin-right: 15px;
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  height: calc(100vh - 40px);
+  padding: 35px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+
+  @media screen and (max-width: $mobile) {
+    display: none;
+  }
 }
 
 .logo {
   width: 100%;
-  height: 200px;
+  height: 150px;
   position: relative;
 
   & img {
@@ -23,16 +36,56 @@
 
 .catalog {
   list-style-type: none;
+  padding: 0;
+  width: 100%;
 }
 
 .catalogItem {
-  margin: 20px 0px;
+  padding: 15px 0px;
   font-weight: bold;
   color: var(--color-text);
   cursor: pointer;
   transition: all 0.1s;
+  border-bottom: 1px solid var(--color-grey-10);
+
+  & > * {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  &.active > * {
+    color: var(--color-primary);
+  }
+
   &:hover {
     color: var(--color-primary);
     filter: brightness(1.15);
   }
+}
+
+.switchFilterCatalog {
+  font-weight: bold;
+}
+.switchItem {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  &::after {
+    content: "";
+    width: 0;
+    height: 2px;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    background-color: currentColor;
+    transition: all ease-in-out .3s;
+  }
+  &:hover {
+    &::after {
+      width: 100%;
+    }
+  }
+}
+.switchItem.active {
+  color: var(--color-primary);
 }

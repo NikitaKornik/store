@@ -1,15 +1,31 @@
+@import "../../styles/__breakpoints.scss";
+
 .root {
   margin-top: 20px;
-  width: 100%;
+  max-width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+  width: 100%;
+
+  @media screen and (max-width: $desktop) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (max-width: $tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: $mobile) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pageInfo {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: column;
   margin: 20px 0;
   padding: 15px 20px;
   background-color: var(--color-grey-50);
@@ -23,6 +39,7 @@
 }
 
 .productsCount {
+  margin-top: 10px;
   font-size: 14px;
   color: var(--color-grey-10);
 }
@@ -43,4 +60,14 @@
   .productsCount {
     font-size: 12px;
   }
+}
+
+.emptyPage {
+  color: var(--color-grey-10);
+  font-size: 35px;
+  font-weight: bold;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
