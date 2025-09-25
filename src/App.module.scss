@@ -6,14 +6,5 @@ body {
 }
 
 .root {
-  margin: 30px auto;
-  display: grid;
-  box-sizing: border-box;
-  max-width: 1380px;
   height: 100vh;
-  grid-template-columns: 280px auto;
-
-  @media screen and (max-width: $mobile) {
-    grid-template-columns: auto;
-  }
 }

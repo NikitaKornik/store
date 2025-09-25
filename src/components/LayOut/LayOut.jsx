@@ -7,7 +7,7 @@ function LayOut({ children }) {
   return (
     <div className={s.root}>
       <Header />
-      {children}
+      <div className={s.wrapper}>{children}</div>
       <Footer />
     </div>
   );

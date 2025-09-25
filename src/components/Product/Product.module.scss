@@ -23,7 +23,8 @@
 
 .img {
   transition: all 1s;
-  width: 90%;
+  // width: 90%;
+  height: 90%;
 
   &:hover {
     transform: scale(1.03);

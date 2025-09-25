@@ -138,6 +138,16 @@ function Cart() {
               </div>
             </div>
 
+            {/* Общая стоимость товара */}
+            <div className={s.itemTotal}>
+              {Math.round(
+                (item.discount
+                  ? item.price * (1 - item.discount / 100)
+                  : item.price) * item.quantity
+              )}{" "}
+              {item.currency}
+            </div>
+
             {/* Управление количеством */}
             <div className={s.itemQuantity}>
               <Btn
@@ -160,16 +170,6 @@ function Cart() {
               >
                 +
               </Btn>
-            </div>
-
-            {/* Общая стоимость товара */}
-            <div className={s.itemTotal}>
-              {Math.round(
-                (item.discount
-                  ? item.price * (1 - item.discount / 100)
-                  : item.price) * item.quantity
-              )}{" "}
-              {item.currency}
             </div>
 
             {/* Кнопка удаления */}

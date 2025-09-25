@@ -8,15 +8,17 @@
   position: fixed;
   left: 20px;
   bottom: 20px;
+  top: 20px;
   height: calc(100vh - 40px);
   padding: 35px;
   display: flex;
   justify-content: start;
   align-items: center;
   flex-direction: column;
+  display: none;
 
-  @media screen and (max-width: $mobile) {
-    display: none;
+  @include tablet {
+    display: flex;
   }
 }
 
@@ -78,7 +80,7 @@
     left: 0;
     bottom: -2px;
     background-color: currentColor;
-    transition: all ease-in-out .3s;
+    transition: all ease-in-out 0.3s;
   }
   &:hover {
     &::after {

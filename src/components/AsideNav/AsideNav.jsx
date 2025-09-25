@@ -1,13 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import cn from "classnames";
+import { catalog } from "../../data/catalog";
 import s from "./AsideNav.module.scss";
-
-const catalog = [
-  { name: "Телефоны", category: "smartphones" },
-  { name: "Гарнитуры", category: "headphones" },
-  { name: "Умные часы", category: "smartwatches" },
-];
 
 function AsideNav() {
   const { pathname } = useLocation();

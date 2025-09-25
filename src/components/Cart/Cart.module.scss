@@ -1,6 +1,7 @@
+@import "../../styles/__breakpoints.scss";
+
 .root {
   max-width: 1200px;
-  width: 100%;
   margin: 0 auto;
 }
 
@@ -27,17 +28,15 @@
 }
 
 .cartItem {
-  display: grid;
-  grid-template-columns: 120px minmax(235px, 1fr) 120px 100px 60px;
-  gap: 20px;
-  align-items: center;
-  padding: 20px;
-  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   background-color: var(--color-grey-50);
   border-radius: 15px;
   transition: all 0.2s;
-  position: relative;
   overflow: hidden;
+  margin-bottom: 40px;
+  position: relative;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -46,48 +45,83 @@
   &::after {
     content: "";
   }
+
+  @include desktop {
+    display: grid;
+    grid-template-columns: 160px minmax(115px, 1fr) 100px 140px 20px;
+    gap: 20px;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 15px;
+  }
 }
 
 .itemImage {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 140px;
+  height: 300px;
   border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: white;
   z-index: 2;
   box-shadow: 0px 0 0 7px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   img {
+    height: 80%;
     z-index: 2;
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
     transition: 1s all;
   }
 
   img:hover {
     transform: scale(1.05);
   }
+
+  @include tablet-sm {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 230px;
+  }
+
+  @include desktop {
+    width: 180px;
+  }
 }
 
 .itemInfo {
   min-width: 0; // Важно для правильного обрезания текста
+  // margin: 20px auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  @include tablet-sm {
+    padding-left: 250px;
+    padding-right: 60px;
+  }
+
+  @include desktop {
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: start;
+  }
 
   .itemTitle {
     margin: 0 0 8px 0;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: bold;
     color: var(--color-text);
     word-wrap: break-word;
     overflow-wrap: break-word;
     position: relative;
     display: inline-block;
+
+    @include desktop {
+      font-size: 18px;
+    }
 
     &:hover::after {
       width: 100%;
@@ -107,7 +141,7 @@
 
   .itemDesc {
     margin: 0 0 12px 0;
-    font-size: 14px;
+    font-size: 12px;
     color: var(--color-grey-10);
     line-height: 1.4;
     overflow: hidden;
@@ -117,6 +151,10 @@
     -webkit-box-orient: vertical;
     word-wrap: break-word;
     overflow-wrap: break-word;
+
+    @include desktop {
+      font-size: 14px;
+    }
   }
 }
 
@@ -127,15 +165,23 @@
   flex-wrap: wrap;
 
   .price {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--color-text);
+
+    @include desktop {
+      font-size: 18px;
+    }
   }
 
   .originalPrice {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--color-grey-10);
     text-decoration: line-through;
+
+    @include desktop {
+      font-size: 14px;
+    }
   }
 
   .discountBadge {
@@ -149,9 +195,11 @@
 }
 
 .itemQuantity {
+  margin: auto;
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 20px 0px;
 
   .quantity {
     min-width: 30px;
@@ -159,6 +207,16 @@
     font-weight: 600;
     font-size: 16px;
     color: var(--color-text);
+  }
+
+  @include tablet-sm {
+    padding-left: 250px;
+    padding-right: 60px;
+  }
+
+  @include desktop {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 
@@ -168,11 +226,32 @@
   color: var(--color-text);
   text-align: center;
   min-width: 80px;
+  color: var(--color-primary);
+  font-size: 20px;
+  font-weight: bold;
+
+  @include tablet-sm {
+    padding-left: 250px;
+    padding-right: 60px;
+  }
+
+  @include desktop {
+    padding-left: 0px;
+    padding-right: 0px;
+    font-size: 26px;
+  }
 }
 
 .itemActions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: flex;
   justify-content: center;
+
+  @include tablet-sm {
+    position: absolute;
+  }
 }
 
 .cartSummary {
@@ -185,7 +264,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
-  width: 450px;
+  max-width: 450px;
   margin: auto;
 }
 
@@ -245,75 +324,75 @@
 }
 
 // Адаптивность для планшетов
-@media (max-width: 768px) {
-  .cartItem {
-    grid-template-columns: 100px 1fr;
-    gap: 15px;
-    padding: 15px;
-  }
+// @media (max-width: 768px) {
+// .cartItem {
+// grid-template-columns: 100px 1fr;
+// gap: 15px;
+// padding: 15px;
+// }
 
-  .itemImage img {
-    width: 80px;
-    height: 80px;
-  }
+//   .itemImage img {
+//     width: 80px;
+//     height: 80px;
+//   }
 
-  .itemQuantity,
-  .itemTotal,
-  .itemActions {
-    grid-column: 1 / -1;
-    justify-self: center;
-    margin-top: 10px;
-  }
+//   .itemQuantity,
+//   .itemTotal,
+//   .itemActions {
+//     grid-column: 1 / -1;
+//     justify-self: center;
+//     margin-top: 10px;
+//   }
 
-  .cartSummary {
-    flex-direction: column;
-    text-align: center;
-  }
+//   .cartSummary {
+//     flex-direction: column;
+//     text-align: center;
+//   }
 
-  .summaryActions {
-    justify-content: center;
-  }
-}
+//   .summaryActions {
+//     justify-content: center;
+//   }
+// }
 
 // Адаптивность для мобильных устройств
-@media (max-width: 480px) {
-  .root {
-    padding: 15px;
-  }
+// @media (max-width: 480px) {
+//   .root {
+//     padding: 15px;
+//   }
 
-  .header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+//   .header {
+//     flex-direction: column;
+//     gap: 15px;
+//     text-align: center;
 
-    h1 {
-      font-size: 24px;
-    }
-  }
+//     h1 {
+//       font-size: 24px;
+//     }
+//   }
 
-  .cartItem {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 12px;
-    padding: 12px;
-  }
+//   .cartItem {
+//     grid-template-columns: 1fr;
+//     text-align: center;
+//     gap: 12px;
+//     // padding: 12px;
+//   }
 
-  .itemImage img {
-    width: 120px;
-    height: 120px;
-  }
+//   .itemImage img {
+//     width: 120px;
+//     height: 120px;
+//   }
 
-  .itemQuantity,
-  .itemTotal,
-  .itemActions {
-    margin-top: 0;
-  }
+//   .itemQuantity,
+//   .itemTotal,
+//   .itemActions {
+//     margin-top: 0;
+//   }
 
-  .summaryActions {
-    flex-direction: column;
-    width: 100%;
-  }
-}
+//   .summaryActions {
+//     flex-direction: column;
+//     width: 100%;
+//   }
+// }
 
 .line {
   background-color: var(--color-grey-10);

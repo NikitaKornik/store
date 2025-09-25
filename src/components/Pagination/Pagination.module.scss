@@ -54,6 +54,11 @@
   color: var(--color-grey-10);
   cursor: default;
   user-select: none;
+
+  &:hover {
+    filter: brightness(1);
+    transform: translateY(0px);
+  }
 }
 
 // Адаптивность для мобильных устройств

@@ -8,6 +8,8 @@ import ProductList from "./components/ProductList/ProductList";
 import ProductPage from "./components/ProductPage/ProductPage";
 import Cart from "./components/Cart/Cart";
 import "./styles/__colors.scss";
+import BrandList from "./components/BrandList/BrandList";
+import Catalog from "./components/Catalog/Catalog";
 
 function App() {
   return (
@@ -24,6 +26,15 @@ function App() {
               />
               <Route path="products/:category" element={<ProductList />} />
               <Route path="products" element={<ProductList />} />
+              <Route
+                path=""
+                element={
+                  <>
+                    <BrandList />
+                    <Catalog />
+                  </>
+                }
+              />
             </Routes>
           </LayOut>
         </div>

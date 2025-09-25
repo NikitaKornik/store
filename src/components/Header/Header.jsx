@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../hooks/useAPI";
+import { CartContext } from "../../context/ContextProvider";
 import Btn from "../UIkit/Btn/Btn";
 import Search from "../UIkit/Search/Search";
 import s from "./Header.module.scss";
@@ -10,27 +11,47 @@ import { ReactComponent as ShoppingCartSvg } from "../../assets/icons/shoppingCa
 import { ReactComponent as LanguageSvg } from "../../assets/icons/language.svg";
 
 function Header() {
+  const [scrollY, setScrollY] = useState(0);
+  const [opacity, setOpacity] = useState(false);
   const navigate = useNavigate();
-  const { cart, getCart } = useCart();
-  const [cartItemCount, setCartItemCount] = useState(0);
+  // const { cart, getCart } = useCart();
+  const { cartItemCount } = useContext(CartContext);
+  // const [cartItemCount, setCartItemCount] = useState(0);
 
-  useEffect(() => {
-    getCart();
-  }, [getCart]);
+  // useEffect(() => {
+  //   getCart();
+  // }, [getCart]);
 
   // Вычисляем общее количество товаров в корзине
-  useEffect(() => {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    setCartItemCount(totalItems);
-  }, [cart]);
+  // useEffect(() => {
+  //   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  //   setCartItemCount(totalItems);
+  // }, [cart]);
 
   const handleCartClick = () => {
     navigate("/cart");
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setOpacity(window.scrollY >= scrollY ? true : false);
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollY]);
+
   return (
-    <header className={s.root}>
-      <Btn icon={<LocateSvg />} onClickFunc={() => console.log(1)}>
+    <header
+      className={s.root}
+      style={scrollY > 0 && opacity ? { opacity: 0 } : { opacity: 1 }}
+    >
+      <Btn
+        icon={<LocateSvg />}
+        onClickFunc={() => console.log("location not avalivle now")}
+        reduction={"tablet"}
+      >
         Магазины
       </Btn>
       <Search onSearch={(value) => console.log("Ищем:", value)} />

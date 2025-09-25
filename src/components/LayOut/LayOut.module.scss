@@ -1,18 +1,30 @@
 @import "../../styles/_breakpoints";
 
 .root {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  box-sizing: border-box;
-  flex-direction: column;
+  //   display: flex;
+  //   justify-content: start;
+  //   align-items: center;
+  //   box-sizing: border-box;
+  // flex-direction: column;
   position: absolute;
   top: 20px;
-  left: 310px;
+  left: 20px;
   right: 20px;
   bottom: 20px;
 
-  @media screen and (max-width: $mobile) {
-    margin: 0px 15px;
+  //   @media screen and (max-width: $mobile) {
+  //     margin: 0px 15px;
+  //   }
+  @include tablet {
+    left: 310px;
+  }
+}
+
+.wrapper {
+  margin-top: 210px;
+  position: relative;
+
+  @include tablet {
+    margin-top: 100px;
   }
 }

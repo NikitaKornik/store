@@ -1,13 +1,23 @@
+@import "../../styles/__breakpoints.scss";
+
 .root {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  gap: 20px;
   padding: 20px;
   box-sizing: border-box;
   background-color: var(--color-grey-50);
   border-radius: 15px;
-  margin-bottom: 20px;
+  right: 20px;
+  left: 20px;
+  position: fixed;
+  z-index: 999;
+  transition: opacity 0.4s;
+
+  @include tablet {
+    left: 310px;
+  }
 }
 
 .svgContainer {

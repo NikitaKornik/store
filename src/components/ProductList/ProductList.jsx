@@ -21,6 +21,9 @@ function ProductList() {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
   const { category } = useParams();
+  useEffect(() => {
+    handlePageChange(1);
+  }, [category]);
   //let filtredProducts = category
   //? products.filter((product) => product.category === category)
   //: products;

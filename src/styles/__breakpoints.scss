@@ -1,5 +1,35 @@
-$mobile-sm: 360px;   // самые маленькие телефоны
-$mobile: 480px;      // обычные смартфоны
-$tablet: 768px;      // планшеты
-$desktop: 1024px;    // ноутбуки
+$mobile: 380px; // самые маленькие телефоны
+$tablet-sm: 540px; // обычные смартфоны
+$tablet: 768px; // планшеты
+$desktop: 1024px; // ноутбуки
 $desktop-lg: 1440px; // большие мониторы
+
+@mixin mobile {
+  @media (min-width: #{$mobile}) {
+    @content;
+  }
+}
+
+@mixin tablet-sm {
+  @media (min-width: #{$tablet-sm}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop}) {
+    @content;
+  }
+}
+
+@mixin desktop-lg {
+  @media (min-width: #{$desktop-lg}) {
+    @content;
+  }
+}

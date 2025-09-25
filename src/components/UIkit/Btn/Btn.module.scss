@@ -13,6 +13,7 @@
   transition: all 0.2s;
   position: relative;
   text-align: center;
+  user-select: none;
 }
 
 .notification::before {

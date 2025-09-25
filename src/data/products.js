@@ -3,7 +3,7 @@ export const products = [
   {
     id: 1,
     category: "smartphones",
-    imgUrl: "/uploads/product1.png",
+    imgUrl: "/uploads/smartphones/smartphone1.png",
     title: "iPhone 12",
     desc: '6.1" | 48 Мп | 128GB | 8GB | DualSIM',
     price: 849,
@@ -13,7 +13,7 @@ export const products = [
   {
     id: 2,
     category: "smartphones",
-    imgUrl: "/uploads/product2.png",
+    imgUrl: "/uploads/smartphones/smartphone2.png",
     title: "iPhone 13",
     desc: '6.1" | 48 Мп | 256GB | 8GB | DualSIM',
     price: 899,
@@ -22,7 +22,7 @@ export const products = [
   {
     id: 3,
     category: "smartphones",
-    imgUrl: "/uploads/product3.png",
+    imgUrl: "/uploads/smartphones/smartphone3.png",
     title: "iPhone 14",
     desc: '6.1" | 48 Мп | 512GB | 8GB | eSIM',
     price: 999,
@@ -31,7 +31,7 @@ export const products = [
   {
     id: 4,
     category: "smartphones",
-    imgUrl: "/uploads/product4.png",
+    imgUrl: "/uploads/smartphones/smartphone4.png",
     title: "Samsung Galaxy S22",
     desc: '6.1" | 50 Мп | 256GB | 8GB | DualSIM',
     price: 799,
@@ -40,7 +40,7 @@ export const products = [
   {
     id: 5,
     category: "smartphones",
-    imgUrl: "/uploads/product5.png",
+    imgUrl: "/uploads/smartphones/smartphone5.png",
     title: "Samsung Galaxy S23",
     desc: '6.1" | 50 Мп | 512GB | 12GB | eSIM',
     price: 949,
@@ -49,7 +49,7 @@ export const products = [
   {
     id: 6,
     category: "smartphones",
-    imgUrl: "/uploads/product6.png",
+    imgUrl: "/uploads/smartphones/smartphone6.png",
     title: "Google Pixel 7",
     desc: '6.3" | 50 Мп | 128GB | 8GB | eSIM',
     price: 699,
@@ -58,7 +58,7 @@ export const products = [
   {
     id: 7,
     category: "smartphones",
-    imgUrl: "/uploads/product7.png",
+    imgUrl: "/uploads/smartphones/smartphone7.png",
     title: "Google Pixel 8",
     desc: '6.2" | 50 Мп | 256GB | 8GB | eSIM',
     price: 799,
@@ -68,7 +68,7 @@ export const products = [
   {
     id: 8,
     category: "smartphones",
-    imgUrl: "/uploads/product8.png",
+    imgUrl: "/uploads/smartphones/smartphone8.png",
     title: "Xiaomi 13",
     desc: '6.4" | 54 Мп | 256GB | 12GB | DualSIM',
     price: 649,
@@ -77,7 +77,7 @@ export const products = [
   {
     id: 9,
     category: "smartphones",
-    imgUrl: "/uploads/product9.png",
+    imgUrl: "/uploads/smartphones/smartphone9.png",
     title: "Xiaomi 14",
     desc: '6.36" | 50 Мп | 512GB | 16GB | DualSIM',
     price: 849,
@@ -86,7 +86,7 @@ export const products = [
   {
     id: 10,
     category: "smartphones",
-    imgUrl: "/uploads/product10.png",
+    imgUrl: "/uploads/smartphones/smartphone10.png",
     title: "Nothing Phone (2)",
     desc: '6.7" | 50 Мп | 256GB | 12GB | DualSIM',
     price: 749,
@@ -95,7 +95,7 @@ export const products = [
   {
     id: 11,
     category: "smartphones",
-    imgUrl: "/uploads/product5.png",
+    imgUrl: "/uploads/smartphones/smartphone5.png",
     title: "iPhone SE (2022)",
     desc: '4.7" | 12 Мп | 128GB | 4GB | eSIM',
     price: 429,
@@ -104,7 +104,7 @@ export const products = [
   {
     id: 12,
     category: "smartphones",
-    imgUrl: "/uploads/product3.png",
+    imgUrl: "/uploads/smartphones/smartphone3.png",
     title: "Samsung Galaxy A54",
     desc: '6.4" | 50 Мп | 128GB | 6GB | DualSIM',
     price: 399,
@@ -113,7 +113,7 @@ export const products = [
   {
     id: 13,
     category: "smartphones",
-    imgUrl: "/uploads/product2.png",
+    imgUrl: "/uploads/smartphones/smartphone2.png",
     title: "Realme GT 3",
     desc: '6.7" | 64 Мп | 256GB | 16GB | DualSIM',
     price: 599,
@@ -122,7 +122,7 @@ export const products = [
   {
     id: 14,
     category: "smartphones",
-    imgUrl: "/uploads/product6.png",
+    imgUrl: "/uploads/smartphones/smartphone6.png",
     title: "OnePlus 11",
     desc: '6.7" | 50 Мп | 512GB | 16GB | DualSIM',
     price: 899,
@@ -131,7 +131,7 @@ export const products = [
   {
     id: 15,
     category: "smartphones",
-    imgUrl: "/uploads/product8.png",
+    imgUrl: "/uploads/smartphones/smartphone8.png",
     title: "Honor Magic5 Pro",
     desc: '6.81" | 50 Мп | 512GB | 12GB | DualSIM',
     price: 949,
@@ -140,7 +140,7 @@ export const products = [
   {
     id: 16,
     category: "smartphones",
-    imgUrl: "/uploads/product9.png",
+    imgUrl: "/uploads/smartphones/smartphone9.png",
     title: "Sony Xperia 1 V",
     desc: '6.5" | 48 Мп | 256GB | 12GB | eSIM',
     price: 1099,
@@ -149,7 +149,7 @@ export const products = [
   {
     id: 17,
     category: "smartphones",
-    imgUrl: "/uploads/product1.png",
+    imgUrl: "/uploads/smartphones/smartphone1.png",
     title: "Motorola Edge 40 Pro",
     desc: '6.67" | 50 Мп | 512GB | 12GB | DualSIM',
     price: 799,
@@ -158,7 +158,7 @@ export const products = [
   {
     id: 18,
     category: "smartphones",
-    imgUrl: "/uploads/product4.png",
+    imgUrl: "/uploads/smartphones/smartphone4.png",
     title: "Asus ROG Phone 7",
     desc: '6.78" | 64 Мп | 512GB | 16GB | DualSIM',
     price: 999,
@@ -167,7 +167,7 @@ export const products = [
   {
     id: 19,
     category: "smartphones",
-    imgUrl: "/uploads/product7.png",
+    imgUrl: "/uploads/smartphones/smartphone7.png",
     title: "Huawei P60 Pro",
     desc: '6.67" | 48 Мп | 512GB | 12GB | DualSIM',
     price: 899,
@@ -176,7 +176,7 @@ export const products = [
   {
     id: 20,
     category: "smartphones",
-    imgUrl: "/uploads/product10.png",
+    imgUrl: "/uploads/smartphones/smartphone10.png",
     title: "iPhone 15 Pro",
     desc: '6.1" | 48 Мп | 1TB | 8GB | eSIM',
     price: 1299,
@@ -187,7 +187,7 @@ export const products = [
   {
     id: 21,
     category: "smartwatches",
-    imgUrl: "/uploads/watch1.png",
+    imgUrl: "/uploads/watches/watch1.png",
     title: "Apple Watch Series 7",
     desc: "AMOLED | GPS | 41mm",
     price: 849,
@@ -197,7 +197,7 @@ export const products = [
   {
     id: 22,
     category: "smartwatches",
-    imgUrl: "/uploads/watch2.png",
+    imgUrl: "/uploads/watches/watch2.png",
     title: "Apple Watch Series 9",
     desc: "AMOLED | GPS | 44mm",
     price: 899,
@@ -206,7 +206,7 @@ export const products = [
   {
     id: 23,
     category: "smartwatches",
-    imgUrl: "/uploads/watch3.png",
+    imgUrl: "/uploads/watches/watch3.png",
     title: "Apple Watch Series 10",
     desc: "AMOLED | GPS | 45mm",
     price: 999,
@@ -215,7 +215,7 @@ export const products = [
   {
     id: 24,
     category: "smartwatches",
-    imgUrl: "/uploads/watch4.png",
+    imgUrl: "/uploads/watches/watch4.png",
     title: "Apple Watch Series 8",
     desc: "AMOLED | GPS | 42mm",
     price: 799,
@@ -224,7 +224,7 @@ export const products = [
   {
     id: 25,
     category: "smartwatches",
-    imgUrl: "/uploads/watch2.png",
+    imgUrl: "/uploads/watches/watch2.png",
     title: "Apple Watch Series 9",
     desc: "AMOLED | GPS + Cellular | 44mm",
     price: 949,
@@ -233,7 +233,7 @@ export const products = [
   {
     id: 26,
     category: "smartwatches",
-    imgUrl: "/uploads/watch4.png",
+    imgUrl: "/uploads/watches/watch4.png",
     title: "Apple Watch Series 10",
     desc: "AMOLED | GPS + Cellular | 45mm",
     price: 699,
@@ -242,7 +242,7 @@ export const products = [
   {
     id: 27,
     category: "smartwatches",
-    imgUrl: "/uploads/watch1.png",
+    imgUrl: "/uploads/watches/watch1.png",
     title: "Apple Watch Series 9",
     desc: "AMOLED | GPS | 41mm",
     price: 799,
@@ -252,7 +252,7 @@ export const products = [
   {
     id: 28,
     category: "smartwatches",
-    imgUrl: "/uploads/watch3.png",
+    imgUrl: "/uploads/watches/watch3.png",
     title: "Apple Watch Series 7",
     desc: "AMOLED | GPS | 42mm",
     price: 649,
@@ -261,7 +261,7 @@ export const products = [
   {
     id: 29,
     category: "smartwatchess",
-    imgUrl: "/uploads/watch2.png",
+    imgUrl: "/uploads/watches/watch2.png",
     title: "Apple Watch Series 8",
     desc: "AMOLED | GPS + Cellular | 44mm",
     price: 849,

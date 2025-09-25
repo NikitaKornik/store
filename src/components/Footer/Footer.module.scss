@@ -1,3 +1,5 @@
+@import "../../styles/__breakpoints.scss";
+
 .root {
   width: 100%;
   margin-top: 60px;
@@ -6,7 +8,22 @@
 .info {
   display: flex;
   justify-content: space-evenly;
+  flex-direction: column;
+  gap: 20px;
   color: var(--color-grey-10);
+  font-size: 20px;
+
+  @include tablet-sm {
+    flex-direction: row;
+    gap: 5px;
+    font-size: 10px;
+  }
+
+  @include desktop {
+    flex-direction: row;
+    gap: 5px;
+    font-size: 14px;
+  }
 }
 
 .ul {
@@ -18,7 +35,7 @@
     margin: 5px 0px;
     transition: 0.2s all;
     cursor: pointer;
-    
+
     &:hover {
       color: var(--color-primary);
     }
