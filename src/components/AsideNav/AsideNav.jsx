@@ -10,7 +10,7 @@ function AsideNav() {
   const category = parts[2];
   return (
     <div className={s.root}>
-      <Link className={s.logo}>
+      <Link to={""} className={s.logo}>
         <img src="/img/MobileLend.png" alt="Store Logo" />
       </Link>
       <div className={s.switchFilterCatalog}>
@@ -21,14 +21,27 @@ function AsideNav() {
       <ul className={s.catalog}>
         {catalog.map((item, index) => {
           return (
-            <li
+            <Link
+              style={{ textDecoration: "none" }}
+              to={"products/" + item.category}
+            >
+              <li
+                key={index}
+                className={cn(s.catalogItem, {
+                  [s.active]: item.category === category,
+                })}
+              >
+                {item.name}
+              </li>
+            </Link>
+            /* <li
               key={index}
               className={cn(s.catalogItem, {
                 [s.active]: item.category === category,
               })}
             >
               <Link to={"products/" + item.category}>{item.name}</Link>
-            </li>
+            </li> */
           );
         })}
       </ul>

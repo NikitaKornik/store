@@ -11,6 +11,10 @@
   left: 20px;
   right: 20px;
   bottom: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   //   @media screen and (max-width: $mobile) {
   //     margin: 0px 15px;

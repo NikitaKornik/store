@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useProducts } from "../../hooks/useAPI";
-import Btn from "../UIkit/Btn/Btn";
+import Btn from "../../components/UIkit/Btn/Btn";
 import s from "./ProductPage.module.scss";
 
 function ProductPage() {

@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useProducts } from "../../hooks/useAPI";
 import { SearchContext } from "../../context/ContextProvider";
-import Product from "../Product/Product";
-import Pagination from "../Pagination/Pagination";
+import Product from "../../components/Product/Product";
+import Pagination from "../../components/Pagination/Pagination";
 import s from "./ProductList.module.scss";
 
 function ProductList() {
