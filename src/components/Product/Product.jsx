@@ -5,7 +5,16 @@ import Btn from "../UIkit/Btn/Btn";
 import s from "./Product.module.scss";
 import { ReactComponent as ShoppingCartSvg } from "../../assets/icons/shoppingCart.svg";
 
-function Product({ imgUrl, title, desc, price, currency, discount, id }) {
+function Product({
+  imgUrl,
+  title,
+  desc,
+  price,
+  currency,
+  discount,
+  id,
+  category,
+}) {
   const { addToCart } = useCart();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
@@ -25,14 +34,15 @@ function Product({ imgUrl, title, desc, price, currency, discount, id }) {
 
   return (
     <div className={s.root}>
-      <Link to={`product/${id}`}>
+      {/* <Link to={`product/${id}`}> */}
+      <Link to={`/products/${category}/${id}`}>
         <div className={s.imgContainer}>
           <img className={s.img} src={imgUrl} alt="" />
         </div>
       </Link>
       <div className={s.infoContainer}>
         <div className={s.title}>
-          <Link to={`product/${id}`}>{title}</Link>
+          <Link to={`/products/${category}/${id}`}>{title}</Link>
         </div>
 
         <div className={s.desc}>{desc}</div>

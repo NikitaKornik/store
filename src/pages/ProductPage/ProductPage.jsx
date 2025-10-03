@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useProducts } from "../../hooks/useAPI";
 import Btn from "../../components/UIkit/Btn/Btn";
 import s from "./ProductPage.module.scss";
+import Breadcrumbs from "../../components/UIkit/Breadcrumbs/Breadcrumbs";
 
 function ProductPage() {
   const { id, category } = useParams();
@@ -38,6 +39,7 @@ function ProductPage() {
 
   return (
     <div className={s.root}>
+      <Breadcrumbs productPage={true} />
       <div className={s.header}>
         <Btn
           color="secondary"

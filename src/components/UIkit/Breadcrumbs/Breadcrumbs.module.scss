@@ -1,0 +1,25 @@
+.root {
+  padding: 20px 0px 30px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  & > * {
+    color: var(--color-grey-10);
+    font-size: 18px;
+    transition: color 0.2s ease-in-out;
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+}
+
+.line {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-grey-10);
+  margin: 0px 10px;
+}
+
+.active {
+  color: var(--color-text);
+}

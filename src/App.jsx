@@ -20,10 +20,7 @@ function App() {
           <LayOut>
             <Routes>
               <Route path="cart" element={<Cart />} />
-              <Route
-                path="products/:category/product/:id"
-                element={<ProductPage />}
-              />
+              <Route path="products/:category/:id" element={<ProductPage />} />
               <Route path="products/:category" element={<ProductList />} />
               <Route path="products" element={<ProductList />} />
               <Route

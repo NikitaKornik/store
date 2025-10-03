@@ -5,6 +5,7 @@ import { SearchContext } from "../../context/ContextProvider";
 import Product from "../../components/Product/Product";
 import Pagination from "../../components/Pagination/Pagination";
 import s from "./ProductList.module.scss";
+import Breadcrumbs from "../../components/UIkit/Breadcrumbs/Breadcrumbs";
 
 function ProductList() {
   const { products, getAllProducts } = useProducts();
@@ -70,6 +71,7 @@ function ProductList() {
     <>
       {filtredProducts.length > 0 ? (
         <>
+          <Breadcrumbs />
           <div className={s.pageInfo}>
             <div className={s.pageIndicator}>
               Страница {currentPage} из {totalPages}
@@ -91,6 +93,7 @@ function ProductList() {
                 price={product.price}
                 currency={product.currency}
                 discount={product.discount}
+                category={product.category}
               />
             ))}
           </div>
