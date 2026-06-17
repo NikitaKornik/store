@@ -11,6 +11,8 @@ function ProductList() {
   const { products, getAllProducts } = useProducts();
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(12);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("popular");
   const { query } = useContext(SearchContext);
 
   useEffect(() => {
@@ -24,25 +26,48 @@ function ProductList() {
   const { category } = useParams();
   useEffect(() => {
     handlePageChange(1);
-  }, [category]);
+  }, [category, activeFilter, sortBy, query]);
   //let filtredProducts = category
   //? products.filter((product) => product.category === category)
   //: products;
-  let filtredProducts = category
+  let filteredProducts = category
     ? products.filter(
         (product) =>
           product.title.toLowerCase().includes(query.toLowerCase()) &&
           product.category === category
       )
-    : products;
+    : products.filter((product) =>
+        product.title.toLowerCase().includes(query.toLowerCase())
+      );
 
-  const currentProducts = filtredProducts.slice(
+  const productFilters = [
+    { id: "all", label: "Все товары" },
+    { id: "discount", label: "Акции" },
+    { id: "credit", label: "Кредит 0|0|6" },
+    { id: "cashback", label: "Кэшбэк" },
+  ];
+
+  filteredProducts = filteredProducts.filter((product) => {
+    if (activeFilter === "discount") return Boolean(product.discount);
+    if (activeFilter === "credit") return product.price >= 300;
+    if (activeFilter === "cashback") return product.price >= 100;
+    return true;
+  });
+
+  filteredProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === "priceAsc") return a.price - b.price;
+    if (sortBy === "priceDesc") return b.price - a.price;
+    if (sortBy === "discount") return (b.discount || 0) - (a.discount || 0);
+    return a.id - b.id;
+  });
+
+  const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
 
   // Вычисляем общее количество страниц
-  const totalPages = Math.ceil(filtredProducts.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   // Функция для изменения страницы
   const handlePageChange = (pageNumber) => {
@@ -69,15 +94,40 @@ function ProductList() {
 
   return (
     <>
-      {filtredProducts.length > 0 ? (
+      {filteredProducts.length > 0 ? (
         <>
           <Breadcrumbs />
+          <div className={s.toolbar}>
+            <div className={s.filterGroup}>
+              {productFilters.map((filter) => (
+                <button
+                  key={filter.id}
+                  className={`${s.filterChip} ${
+                    activeFilter === filter.id ? s.activeChip : ""
+                  }`}
+                  type="button"
+                  onClick={() => setActiveFilter(filter.id)}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+            <label className={s.sortControl}>
+              <span>Сортировка</span>
+              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option value="popular">Популярные</option>
+                <option value="priceAsc">Цена по возрастанию</option>
+                <option value="priceDesc">Цена по убыванию</option>
+                <option value="discount">Сначала скидки</option>
+              </select>
+            </label>
+          </div>
           <div className={s.pageInfo}>
             <div className={s.pageIndicator}>
               Страница {currentPage} из {totalPages}
             </div>
             <div className={s.productsCount}>
-              Показано {currentProducts.length} из {filtredProducts.length}{" "}
+              Показано {currentProducts.length} из {filteredProducts.length}{" "}
               товаров
             </div>
           </div>

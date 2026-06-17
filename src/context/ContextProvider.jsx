@@ -1,24 +1,33 @@
 import { createContext, useState, useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useCart } from "../hooks/useAPI";
+import { useCart, useFavorites } from "../hooks/useAPI";
 
 export const CartContext = createContext(null);
+export const FavoritesContext = createContext(null);
 export const SearchContext = createContext(null);
 export const ProductContext = createContext(null);
 
 function ContextProvider({ children }) {
   const { cart, getCart } = useCart();
+  const { favorites, getFavorites, toggleFavorite, removeFromFavorites } =
+    useFavorites();
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [favoritesCount, setFavoritesCount] = useState(0);
 
   useEffect(() => {
     getCart();
-  }, [getCart]);
+    getFavorites();
+  }, [getCart, getFavorites]);
 
   // Вычисляем общее количество товаров в корзине
   useEffect(() => {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     setCartItemCount(totalItems);
   }, [cart]);
+
+  useEffect(() => {
+    setFavoritesCount(favorites.length);
+  }, [favorites]);
 
   const [query, setQuery] = useState("");
 
@@ -34,25 +43,41 @@ function ContextProvider({ children }) {
     getCart,
     cartItemCount,
     setCartItemCount,
-  }));
+  }), [cart, getCart, cartItemCount]);
 
   const searchContext = useMemo(() => ({
     query,
     setQuery,
-  }));
+  }), [query]);
+
+  const favoritesContext = useMemo(() => ({
+    favorites,
+    getFavorites,
+    toggleFavorite,
+    removeFromFavorites,
+    favoritesCount,
+  }), [
+    favorites,
+    getFavorites,
+    toggleFavorite,
+    removeFromFavorites,
+    favoritesCount,
+  ]);
 
   const productContext = useMemo(() => ({
     products,
     setProducts,
-  }));
+  }), [products]);
 
   return (
     <CartContext.Provider value={сartContext}>
-      <SearchContext.Provider value={searchContext}>
-        <ProductContext.Provider value={productContext}>
-          {children}
-        </ProductContext.Provider>
-      </SearchContext.Provider>
+      <FavoritesContext.Provider value={favoritesContext}>
+        <SearchContext.Provider value={searchContext}>
+          <ProductContext.Provider value={productContext}>
+            {children}
+          </ProductContext.Provider>
+        </SearchContext.Provider>
+      </FavoritesContext.Provider>
     </CartContext.Provider>
   );
 }

@@ -3,17 +3,18 @@
   justify-content: center;
   align-items: center;
   border: none;
-  padding: 0px 14px;
+  padding: 0px 16px;
   height: 44px;
   min-width: 44px;
-  border-radius: 10px;
-  background-color: var(--color-grey-30);
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.08);
   color: var(--color-text);
   font-weight: 600;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
   position: relative;
   text-align: center;
   user-select: none;
+  white-space: nowrap;
 }
 
 .notification::before {
@@ -32,11 +33,13 @@
 }
 
 .primary {
-  background-color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), #6256dd);
+  box-shadow: 0 12px 28px rgba(124, 109, 242, 0.26);
 }
 
 .secondary {
-  background-color: var(--color-secondary);
+  background-color: rgba(215, 184, 79, 0.16);
+  color: #f4d76f;
 }
 
 .danger {
@@ -51,7 +54,7 @@
   background-color: rgba(0, 0, 0, 0);
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.09);
   }
 }
 
@@ -79,12 +82,16 @@
 .active {
   cursor: pointer;
   &:hover {
-    filter: brightness(1.15);
+    transform: translateY(-1px);
+    filter: brightness(1.08);
   }
 }
 
 .svg {
   height: 45%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .svgOnly {

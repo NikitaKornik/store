@@ -289,6 +289,72 @@ export const cartAPI = {
   },
 };
 
+export const favoritesAPI = {
+  async getFavorites() {
+    try {
+      const favoritesData = localStorage.getItem("favorites");
+
+      if (favoritesData) {
+        return JSON.parse(favoritesData);
+      }
+
+      return [];
+    } catch (error) {
+      console.error("getFavorites: error parsing localStorage:", error);
+      return [];
+    }
+  },
+
+  async addToFavorites(productId) {
+    try {
+      const favoritesData = localStorage.getItem("favorites");
+      const favorites = favoritesData ? JSON.parse(favoritesData) : [];
+      const product = products.find((p) => p.id === productId);
+
+      if (!product) {
+        throw new Error("Товар не найден");
+      }
+
+      if (!favorites.some((item) => item.id === productId)) {
+        favorites.push(product);
+      }
+
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+
+      return apiCall("addToFavorites", { productId, success: true });
+    } catch (error) {
+      console.error("Ошибка при добавлении в избранное:", error);
+      throw error;
+    }
+  },
+
+  async removeFromFavorites(productId) {
+    try {
+      const favoritesData = localStorage.getItem("favorites");
+      const favorites = favoritesData ? JSON.parse(favoritesData) : [];
+      const nextFavorites = favorites.filter((item) => item.id !== productId);
+
+      localStorage.setItem("favorites", JSON.stringify(nextFavorites));
+
+      return apiCall("removeFromFavorites", { productId, success: true });
+    } catch (error) {
+      console.error("Ошибка при удалении из избранного:", error);
+      throw error;
+    }
+  },
+
+  async toggleFavorite(productId) {
+    const favorites = await favoritesAPI.getFavorites();
+    const isFavorite = favorites.some((item) => item.id === productId);
+
+    if (isFavorite) {
+      return favoritesAPI.removeFromFavorites(productId);
+    }
+
+    return favoritesAPI.addToFavorites(productId);
+  },
+};
+
 // API для пользователей (для будущего использования)
 export const userAPI = {
   async login(credentials) {
@@ -355,6 +421,7 @@ export const localApiUtils = {
 const apiService = {
   products: productsAPI,
   cart: cartAPI,
+  favorites: favoritesAPI,
   user: userAPI,
   utils: localApiUtils,
 };

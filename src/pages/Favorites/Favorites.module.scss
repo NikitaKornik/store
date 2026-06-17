@@ -1,0 +1,84 @@
+@import "../../styles/__breakpoints.scss";
+
+.root {
+  width: 100%;
+}
+
+.header {
+  margin-bottom: 22px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+
+  h1 {
+    margin: 6px 0 0;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1;
+  }
+}
+
+.eyebrow {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.count {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-muted);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+
+  @include tablet-sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include desktop-lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.emptyState {
+  min-height: 52vh;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.05);
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(30px, 5vw, 48px);
+  }
+
+  p {
+    max-width: 430px;
+    margin: 0 0 24px;
+    color: var(--color-muted);
+    line-height: 1.5;
+  }
+}

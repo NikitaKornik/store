@@ -1,29 +1,42 @@
 .root {
   min-width: 150px;
-  width: 500px;
+  width: min(520px, 100%);
   position: relative;
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 .input {
   width: 100%;
-  padding: 10px 15px;
+  padding: 13px 46px 13px 16px;
   font-size: 16px;
-  border: 1px solid var(--color-grey-50);
-  border-radius: 8px;
-  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background-color: rgba(5, 8, 13, 0.5);
   color: var(--color-text);
   outline: none;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
 
   &:focus {
     border-color: var(--color-primary);
+    background-color: rgba(5, 8, 13, 0.76);
+    box-shadow: 0 0 0 4px rgba(124, 109, 242, 0.12);
+  }
+
+  &::placeholder {
+    color: var(--color-muted);
   }
 }
 
 .svg {
-  height: 50%;
+  height: 18px;
   width: 40px;
   position: absolute;
-  right: 0;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  pointer-events: none;
 }

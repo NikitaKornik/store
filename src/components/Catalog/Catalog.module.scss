@@ -1,6 +1,14 @@
 .root {
   width: 100%;
   position: relative;
+  margin-top: 28px;
+}
+
+.slider {
+  position: relative;
+  padding: 0 58px;
+  --catalog-card-size: clamp(160px, 14vw, 190px);
+  --catalog-gap: 24px;
 }
 
 .catalogWrapper {
@@ -8,65 +16,65 @@
   height: 100%;
   overflow: hidden;
   position: relative;
-  &::before {
-    content: "";
-    // z-index: 1;
-    position: absolute;
-    left: 0px;
-    width: 100px;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0) 100%
-    );
-  }
-
-  &::after {
-    content: "";
-    // z-index: 1;
-    position: absolute;
-    right: 0;
-    width: 100px;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 1) 100%
-    );
-  }
+  padding: 0 8px 8px;
 }
 
 .catalog {
   display: flex;
   list-style-type: none;
-  gap: 20px;
+  gap: var(--catalog-gap);
   padding: 0;
+  margin: 0;
   z-index: 1;
-  transition: all 0.3s ease-in-out;
-  transform: translateX(-200px);
+  will-change: transform;
+  transform: translateX(
+    calc(
+      var(--active-index, 1) * -1 *
+        (var(--catalog-card-size) + var(--catalog-gap))
+    )
+  );
 }
 
 .title {
-  font-size: 22px;
+  margin: 0 0 16px;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.catalogLink {
+  color: inherit;
+  text-decoration: none;
+  flex: 0 0 auto;
 }
 
 .imgContainer {
-  background-color: white;
-  border-radius: 15px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.92), #edf0f6 72%);
+  border-radius: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 180px;
-  width: 180px;
+  width: var(--catalog-card-size);
+  aspect-ratio: 1;
   user-select: none;
+  box-shadow: inset 0 -18px 34px rgba(15, 23, 42, 0.08), 0 16px 34px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: inset 0 -18px 34px rgba(15, 23, 42, 0.08), 0 22px 42px rgba(0, 0, 0, 0.26);
+  }
 
   &:hover > img {
     transform: scale(1.05);
   }
 
   & img {
-    height: 80%;
+    width: auto;
+    height: auto;
+    max-width: 82%;
+    max-height: 82%;
+    object-fit: contain;
     transition: 0.3s all ease-in-out;
   }
 }
@@ -79,7 +87,13 @@
   font-weight: bold;
   text-decoration: none;
   color: var(--color-text);
-  gap: 20px;
+  gap: 14px;
+  width: var(--catalog-card-size);
+}
+
+.categoryName {
+  color: var(--color-muted);
+  font-size: 14px;
 }
 
 .btn {
@@ -95,21 +109,36 @@
   align-items: center;
   border: 0;
   top: 50%;
-  transform: translateY(-45%);
-  background-color: rgba(103, 103, 103, 0.3);
-  backdrop-filter: blur(7px);
+  transform: translateY(-50%);
+  background-color: rgba(23, 28, 40, 0.78);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(12px);
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   &:hover {
     filter: brightness(1.1);
-    color: var(--color-primary);
+    color: var(--color-primary-strong);
+    transform: translateY(-50%) scale(1.04);
   }
 }
 
 .btnForward {
-  right: 5px;
+  right: 0;
 }
 
 .btnBack {
-  left: 5px;
+  left: 0;
+}
+
+@media (max-width: 720px) {
+  .slider {
+    padding: 0 46px;
+    --catalog-card-size: 168px;
+    --catalog-gap: 16px;
+  }
+
+  .catalog {
+    padding: 0;
+  }
+
 }

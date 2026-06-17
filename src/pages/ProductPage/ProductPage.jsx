@@ -10,6 +10,8 @@ function ProductPage() {
   const navigate = useNavigate();
   const { getProductById } = useProducts();
   const [product, setProduct] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("Титановый");
+  const [selectedMemory, setSelectedMemory] = useState("256GB");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -26,7 +28,7 @@ function ProductPage() {
     if (id) {
       fetchProduct();
     }
-  }, [id, getProductById, navigate]);
+  }, [id, category, getProductById, navigate]);
 
   const handleBackClick = () => {
     console.log("Back button clicked, navigating to /");
@@ -36,6 +38,13 @@ function ProductPage() {
   if (!product) {
     return null;
   }
+
+  const totalPrice = product.discount
+    ? Math.round(product.price * (1 - product.discount / 100))
+    : product.price;
+  const cashback = Math.max(5, Math.round(totalPrice * 0.03));
+  const colors = ["Титановый", "Черный", "Синий", "Белый"];
+  const memoryOptions = ["128GB", "256GB", "512GB", "1TB"];
 
   return (
     <div className={s.root}>
@@ -59,7 +68,59 @@ function ProductPage() {
         </div>
         <div className={s.configurationAndPayment}>
           <div className={s.configuration}>
-            <div>ID prod: {product.id}</div>
+            <div className={s.productId}>ID prod: {product.id}</div>
+            <div className={s.optionGroup}>
+              <span>Цвет</span>
+              <div className={s.optionGrid}>
+                {colors.map((color) => (
+                  <button
+                    key={color}
+                    className={`${s.optionBtn} ${
+                      selectedColor === color ? s.selectedOption : ""
+                    }`}
+                    type="button"
+                    onClick={() => setSelectedColor(color)}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className={s.optionGroup}>
+              <span>Встроенная память</span>
+              <div className={s.optionGrid}>
+                {memoryOptions.map((memory) => (
+                  <button
+                    key={memory}
+                    className={`${s.optionBtn} ${
+                      selectedMemory === memory ? s.selectedOption : ""
+                    }`}
+                    type="button"
+                    onClick={() => setSelectedMemory(memory)}
+                  >
+                    {memory}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className={s.serviceGrid}>
+              <div>
+                <strong>Кэшбэк</strong>
+                <span>{cashback} {product.currency}</span>
+              </div>
+              <div>
+                <strong>Кредит</strong>
+                <span>0 | 0 | 6</span>
+              </div>
+              <div>
+                <strong>Доставка</strong>
+                <span>бесплатно</span>
+              </div>
+              <div>
+                <strong>Гарантия</strong>
+                <span>24 месяца</span>
+              </div>
+            </div>
           </div>
           <div className={s.payment}>
             <div className={s.price}>
@@ -75,11 +136,7 @@ function ProductPage() {
               <div className={s.totalPrice}>
                 <span>Общая стоимость</span>
                 <span className={s.totalPricePrimary}>
-                  {product.discount
-                    ? `${product.price * (1 - product.discount / 100)} ${
-                        product.currency
-                      }`
-                    : `${product.price} ${product.currency}`}
+                  {`${totalPrice} ${product.currency}`}
                 </span>
               </div>
             </div>

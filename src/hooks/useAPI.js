@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { localApiUtils } from "../services/api";
-import { useParams } from "react-router-dom";
 
 export const useAPI = () => {
   const [loading, setLoading] = useState(false);
@@ -40,7 +39,6 @@ export const useAPI = () => {
 
 // Специализированный хук для продуктов
 export const useProducts = () => {
-  const { category } = useParams();
   const { loading, error, execute, clearError } = useAPI();
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState(null);
@@ -212,6 +210,79 @@ export const useCart = () => {
     removeFromCart,
     updateCartItem,
     clearCart,
+    clearError,
+  };
+};
+
+export const useFavorites = () => {
+  const { loading, error, execute, clearError } = useAPI();
+  const [favorites, setFavorites] = useState([]);
+
+  const getFavorites = useCallback(async () => {
+    try {
+      const { favoritesAPI } = await import("../services/api");
+      const data = await execute(favoritesAPI.getFavorites);
+      setFavorites(data);
+      return data;
+    } catch (err) {
+      console.error("Failed to fetch favorites:", err);
+      throw err;
+    }
+  }, [execute]);
+
+  const addToFavorites = useCallback(
+    async (productId) => {
+      try {
+        const { favoritesAPI } = await import("../services/api");
+        const data = await execute(favoritesAPI.addToFavorites, productId);
+        await getFavorites();
+        return data;
+      } catch (err) {
+        console.error("Failed to add to favorites:", err);
+        throw err;
+      }
+    },
+    [execute, getFavorites]
+  );
+
+  const removeFromFavorites = useCallback(
+    async (productId) => {
+      try {
+        const { favoritesAPI } = await import("../services/api");
+        const data = await execute(favoritesAPI.removeFromFavorites, productId);
+        await getFavorites();
+        return data;
+      } catch (err) {
+        console.error("Failed to remove from favorites:", err);
+        throw err;
+      }
+    },
+    [execute, getFavorites]
+  );
+
+  const toggleFavorite = useCallback(
+    async (productId) => {
+      try {
+        const { favoritesAPI } = await import("../services/api");
+        const data = await execute(favoritesAPI.toggleFavorite, productId);
+        await getFavorites();
+        return data;
+      } catch (err) {
+        console.error("Failed to toggle favorite:", err);
+        throw err;
+      }
+    },
+    [execute, getFavorites]
+  );
+
+  return {
+    favorites,
+    loading,
+    error,
+    getFavorites,
+    addToFavorites,
+    removeFromFavorites,
+    toggleFavorite,
     clearError,
   };
 };

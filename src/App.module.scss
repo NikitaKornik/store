@@ -1,10 +1,122 @@
 @import "../src/styles/_breakpoints";
 
 body {
-  background-color: var(--color-bg);
-  color: white;
+  min-height: 100vh;
+  color: var(--color-text);
 }
 
 .root {
-  height: 100vh;
+  min-height: 100vh;
+}
+
+.hero {
+  min-height: 250px;
+  margin-bottom: 28px;
+  padding: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(124, 109, 242, 0.22), rgba(52, 211, 153, 0.08)),
+    var(--color-surface);
+  box-shadow: var(--shadow-panel);
+  position: relative;
+
+  &::after {
+    content: "";
+    width: 360px;
+    height: 360px;
+    position: absolute;
+    right: -120px;
+    top: -130px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.heroContent {
+  max-width: 670px;
+  position: relative;
+  z-index: 1;
+
+  h1 {
+    margin: 12px 0 14px;
+    max-width: 680px;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+
+  p {
+    max-width: 520px;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 18px;
+    line-height: 1.55;
+  }
+}
+
+.heroEyebrow {
+  display: inline-flex;
+  padding: 7px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #dfe3ff;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.heroStats {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(90px, 1fr));
+  gap: 12px;
+
+  div {
+    min-width: 100px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: rgba(8, 11, 17, 0.28);
+  }
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    font-size: 23px;
+  }
+
+  span {
+    margin-top: 2px;
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    min-height: auto;
+    padding: 22px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroContent {
+    h1 {
+      font-size: 36px;
+    }
+
+    p {
+      font-size: 15px;
+    }
+  }
 }

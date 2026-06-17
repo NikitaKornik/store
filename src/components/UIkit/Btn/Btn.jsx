@@ -12,6 +12,7 @@ function Btn({
   style,
   notification,
   reduction,
+  className,
   ...props
 }) {
   const [width, setWidth] = useState(window.innerWidth);
@@ -37,6 +38,8 @@ function Btn({
       case "desktop_lg":
         setReductionWidth(1440);
         break;
+      default:
+        break;
     }
 
     if (width > reductionWidth) {
@@ -47,24 +50,28 @@ function Btn({
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [width, reductionWidth]);
+  }, [width, reductionWidth, reduction]);
 
   return (
     <button
       onClick={disable ? undefined : onClickFunc}
-      className={cn(s.root, {
-        [s.disable]: disable,
-        [s.active]: !disable,
-        [s.primary]: color === "primary",
-        [s.secondary]: color === "secondary",
-        [s.danger]: color === "danger",
-        [s.clear]: color === "clear",
-        [s.sizeSmall]: size === "small",
-        [s.sizeMiddle]: size === "middle",
-        [s.sizeBig]: size === "big",
-        [s.notification]: notification,
-        [s.svgOnly]: !children || (reduction && !reductionChildren),
-      })}
+      className={cn(
+        s.root,
+        {
+          [s.disable]: disable,
+          [s.active]: !disable,
+          [s.primary]: color === "primary",
+          [s.secondary]: color === "secondary",
+          [s.danger]: color === "danger",
+          [s.clear]: color === "clear",
+          [s.sizeSmall]: size === "small",
+          [s.sizeMiddle]: size === "middle",
+          [s.sizeBig]: size === "big",
+          [s.notification]: notification,
+          [s.svgOnly]: !children || (reduction && !reductionChildren),
+        },
+        className
+      )}
       style={style}
       data-notification={notification}
       {...props}

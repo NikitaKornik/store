@@ -1,54 +1,93 @@
 @import "../../styles/__breakpoints.scss";
 
 .root {
-  background-color: var(--color-grey-50);
-  width: 270px;
-  border-radius: 15px;
+  background: rgba(23, 28, 40, 0.84);
+  border: 1px solid var(--color-border);
+  width: min(310px, calc(100vw - 28px));
+  border-radius: 24px;
   box-sizing: border-box;
   position: fixed;
-  left: 20px;
-  bottom: 20px;
-  top: 20px;
-  height: calc(100vh - 40px);
-  // padding: 35px;
+  left: 14px;
+  bottom: 14px;
+  top: 14px;
+  height: calc(100vh - 28px);
   display: flex;
   justify-content: start;
   align-items: center;
   flex-direction: column;
-  display: none;
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(18px);
+  overflow: hidden;
+  z-index: 1200;
+  transform: translateX(calc(-100% - 28px));
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &.open {
+    transform: translateX(0);
+  }
 
   @include tablet {
-    display: flex;
+    width: 270px;
+    left: 20px;
+    bottom: 20px;
+    top: 20px;
+    height: calc(100vh - 40px);
+    z-index: 900;
+    transform: none;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1190;
+  border: 0;
+  background: rgba(5, 8, 13, 0.58);
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.24s ease;
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @include tablet {
+    display: none;
   }
 }
 
 .logo {
   width: 100%;
-  height: 150px;
+  height: 144px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 35px 0px;
+  padding: 30px 0px 24px;
 
   & img {
     height: 100%;
+    filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.35));
   }
 }
 
 .catalog {
   list-style-type: none;
-  padding: 0;
+  padding: 10px;
   width: 100%;
+  margin: 12px 0 0;
 }
 
 .catalogItem {
-  padding: 15px 35px;
-  font-weight: bold;
+  padding: 13px 18px;
+  border-radius: 14px;
+  font-weight: 700;
   color: var(--color-text);
   cursor: pointer;
-  transition: all 0.1s;
+  transition: background-color 0.18s, color 0.18s, transform 0.18s;
 
   & > * {
     color: var(--color-text);
@@ -56,9 +95,9 @@
   }
 
   &.active {
-    color: var(--color-primary);
-    background-color: var(--color-grey-40);
-    padding: 15px 45px;
+    color: white;
+    background: linear-gradient(135deg, var(--color-primary), #5dd8b2);
+    box-shadow: 0 12px 28px rgba(124, 109, 242, 0.25);
   }
 
   &.active > * {
@@ -66,13 +105,15 @@
   }
 
   &:hover {
-    padding: 15px 45px;
-    background-color: var(--color-grey-40);
+    background-color: rgba(255, 255, 255, 0.07);
+    transform: translateX(3px);
   }
 }
 
 .switchFilterCatalog {
   font-weight: bold;
+  color: var(--color-muted);
+  font-size: 14px;
 }
 .switchItem {
   position: relative;

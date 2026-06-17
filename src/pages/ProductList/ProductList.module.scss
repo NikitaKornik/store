@@ -3,7 +3,7 @@
 .root {
   max-width: 100%;
   display: grid;
-  gap: 20px;
+  gap: 18px;
   width: 100%;
   grid-template-columns: 1fr;
 
@@ -25,11 +25,80 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  gap: 8px;
   margin-bottom: 20px;
-  padding: 15px 20px;
-  background-color: var(--color-grey-50);
-  border-radius: 15px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
   color: var(--color-text);
+
+  @include tablet-sm {
+    flex-direction: row;
+  }
+}
+
+.toolbar {
+  margin-bottom: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.filterGroup {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterChip {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--color-muted);
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.18s, color 0.18s, border-color 0.18s;
+
+  &:hover {
+    color: var(--color-text);
+    border-color: rgba(124, 109, 242, 0.34);
+  }
+}
+
+.activeChip {
+  color: white;
+  background: linear-gradient(135deg, var(--color-primary), #5dd8b2);
+  border-color: transparent;
+}
+
+.sortControl {
+  min-width: 210px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 800;
+
+  select {
+    width: 100%;
+    min-height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    outline: none;
+    background: var(--color-bg-soft);
+    color: var(--color-text);
+    font-weight: 700;
+  }
 }
 
 .pageIndicator {
@@ -38,13 +107,22 @@
 }
 
 .productsCount {
-  margin-top: 10px;
   font-size: 14px;
-  color: var(--color-grey-10);
+  color: var(--color-muted);
 }
 
 // Адаптивность для мобильных устройств
 @media (max-width: 768px) {
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sortControl {
+    min-width: 0;
+    justify-content: space-between;
+  }
+
   .pageInfo {
     flex-direction: column;
     gap: 10px;
@@ -62,8 +140,8 @@
 }
 
 .emptyPage {
-  color: var(--color-grey-10);
-  font-size: 35px;
+  color: var(--color-muted);
+  font-size: 32px;
   font-weight: bold;
   height: 50vh;
   display: flex;
