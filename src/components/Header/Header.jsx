@@ -1,6 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CartContext, FavoritesContext } from "../../context/ContextProvider";
+import {
+  CartMetaContext,
+  CompareMetaContext,
+  FavoritesMetaContext,
+} from "../../context/ContextProvider";
+import { languageOptions } from "../../i18n/translations";
+import { useTranslation } from "react-i18next";
 import Btn from "../UIkit/Btn/Btn";
 import Search from "../UIkit/Search/Search";
 import s from "./Header.module.scss";
@@ -8,54 +14,78 @@ import { ReactComponent as LocateSvg } from "../../assets/icons/location.svg";
 import { ReactComponent as HeartSvg } from "../../assets/icons/heart.svg";
 import { ReactComponent as ShoppingCartSvg } from "../../assets/icons/shoppingCart.svg";
 import { ReactComponent as LanguageSvg } from "../../assets/icons/language.svg";
+import { ReactComponent as CompareSvg } from "../../assets/icons/archive-svgrepo-com.svg";
+import { ReactComponent as UserSvg } from "../../assets/icons/user.svg";
 
 function Header({ onMenuClick }) {
-  const [scrollY, setScrollY] = useState(0);
-  const [opacity, setOpacity] = useState(false);
+  const lastScrollY = useRef(0);
+  const [isHidden, setIsHidden] = useState(false);
   const navigate = useNavigate();
-  // const { cart, getCart } = useCart();
-  const { cartItemCount } = useContext(CartContext);
-  const { favoritesCount } = useContext(FavoritesContext);
-  // const [cartItemCount, setCartItemCount] = useState(0);
+  const { cartItemCount } = useContext(CartMetaContext);
+  const { favoritesCount } = useContext(FavoritesMetaContext);
+  const { compareCount } = useContext(CompareMetaContext);
+  const { i18n, t } = useTranslation();
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const language = i18n.resolvedLanguage || i18n.language || "ru";
 
-  // useEffect(() => {
-  //   getCart();
-  // }, [getCart]);
-
-  // Вычисляем общее количество товаров в корзине
-  // useEffect(() => {
-  //   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  //   setCartItemCount(totalItems);
-  // }, [cart]);
-
-  const handleCartClick = () => {
+  const handleCartClick = useCallback(() => {
     navigate("/cart");
-  };
+  }, [navigate]);
 
-  const handleFavoritesClick = () => {
+  const handleFavoritesClick = useCallback(() => {
     navigate("/favorites");
-  };
+  }, [navigate]);
+
+  const handleCompareClick = useCallback(() => {
+    navigate("/compare");
+  }, [navigate]);
+
+  const handleStoresClick = useCallback(() => {
+    navigate("/stores");
+  }, [navigate]);
+
+  const handleAccountClick = useCallback(() => {
+    navigate("/account");
+  }, [navigate]);
 
   useEffect(() => {
+    let frameId = null;
+    lastScrollY.current = window.scrollY;
+
     const handleScroll = () => {
-      setOpacity(window.scrollY >= scrollY ? true : false);
-      setScrollY(window.scrollY);
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+
+      frameId = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const shouldHide =
+          currentScrollY > lastScrollY.current && currentScrollY > 24;
+
+        setIsHidden(shouldHide);
+        if (shouldHide) {
+          setIsLanguageOpen(false);
+        }
+        lastScrollY.current = currentScrollY;
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrollY]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <header
-      className={s.root}
-      style={scrollY > 0 && opacity ? { opacity: 0 } : { opacity: 1 }}
-    >
+    <header className={`${s.root} ${isHidden ? s.hidden : ""}`}>
       <button
         className={s.menuBtn}
         type="button"
         onClick={onMenuClick}
-        aria-label="Открыть меню категорий"
+        aria-label={t("menu")}
       >
         <span />
         <span />
@@ -63,34 +93,75 @@ function Header({ onMenuClick }) {
       </button>
       <Btn
         icon={<LocateSvg />}
-        onClickFunc={() => console.log("location not avalivle now")}
+        onClickFunc={handleStoresClick}
         reduction={"tablet"}
       >
-        Магазины
+        {t("stores")}
       </Btn>
-      <Search onSearch={(value) => console.log("Ищем:", value)} />
+      <Search />
       <div className={s.svgContainer}>
+        <Btn
+          icon={<CompareSvg />}
+          color={"clear"}
+          onClickFunc={handleCompareClick}
+          className={s.headerIconButton}
+          notification={compareCount > 0 && compareCount}
+          aria-label={t("compare")}
+        ></Btn>
         <Btn
           icon={<HeartSvg />}
           color={"clear"}
           onClickFunc={handleFavoritesClick}
-          style={{ position: "relative" }}
+          className={s.headerIconButton}
           notification={favoritesCount > 0 && favoritesCount}
-          aria-label="Открыть избранное"
+          aria-label={t("favorites")}
         ></Btn>
         <Btn
           icon={<ShoppingCartSvg />}
           color={"clear"}
           onClickFunc={handleCartClick}
-          style={{ position: "relative" }}
+          className={s.headerIconButton}
           notification={cartItemCount > 0 && cartItemCount}
-          aria-label="Открыть корзину"
+          aria-label={t("cart")}
         ></Btn>
         <Btn
-          icon={<LanguageSvg />}
+          icon={<UserSvg />}
           color={"clear"}
-          onClickFunc={() => console.log(1)}
+          onClickFunc={handleAccountClick}
+          className={s.headerIconButton}
+          aria-label={t("account")}
         ></Btn>
+        <div className={s.language}>
+          <button
+            className={s.languageBtn}
+            type="button"
+            onClick={() => setIsLanguageOpen((isOpen) => !isOpen)}
+            aria-label={t("language")}
+          >
+            <LanguageSvg />
+            <span>{language.toUpperCase()}</span>
+            <i aria-hidden="true">⌄</i>
+          </button>
+          {isLanguageOpen && (
+            <div className={s.languageMenu}>
+              {languageOptions.map((option) => (
+                <button
+                  key={option.code}
+                  className={option.code === language ? s.activeLanguage : ""}
+                  type="button"
+                  onClick={() => {
+                    i18n.changeLanguage(option.code);
+                    localStorage.setItem("language", option.code);
+                    setIsLanguageOpen(false);
+                  }}
+                >
+                  <span>{option.label}</span>
+                  <strong>{option.name}</strong>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

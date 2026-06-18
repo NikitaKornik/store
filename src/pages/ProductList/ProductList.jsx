@@ -1,110 +1,177 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
+import cn from "classnames";
+import { useTranslation } from "react-i18next";
 import { useProducts } from "../../hooks/useAPI";
 import { SearchContext } from "../../context/ContextProvider";
-import Product from "../../components/Product/Product";
+import ProductGrid from "../../components/ProductGrid/ProductGrid";
 import Pagination from "../../components/Pagination/Pagination";
 import s from "./ProductList.module.scss";
 import Breadcrumbs from "../../components/UIkit/Breadcrumbs/Breadcrumbs";
 
+const PRODUCTS_PER_PAGE = 12;
+
 function ProductList() {
+  const { t } = useTranslation();
   const { products, getAllProducts } = useProducts();
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(12);
   const [activeFilter, setActiveFilter] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
   const { query } = useContext(SearchContext);
+  const { category } = useParams();
 
   useEffect(() => {
     getAllProducts();
   }, [getAllProducts]);
 
-  // Вычисляем индексы для текущей страницы
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-
-  const { category } = useParams();
-  useEffect(() => {
-    handlePageChange(1);
-  }, [category, activeFilter, sortBy, query]);
-  //let filtredProducts = category
-  //? products.filter((product) => product.category === category)
-  //: products;
-  let filteredProducts = category
-    ? products.filter(
-        (product) =>
-          product.title.toLowerCase().includes(query.toLowerCase()) &&
-          product.category === category
-      )
-    : products.filter((product) =>
-        product.title.toLowerCase().includes(query.toLowerCase())
-      );
-
-  const productFilters = [
-    { id: "all", label: "Все товары" },
-    { id: "discount", label: "Акции" },
-    { id: "credit", label: "Кредит 0|0|6" },
-    { id: "cashback", label: "Кэшбэк" },
-  ];
-
-  filteredProducts = filteredProducts.filter((product) => {
-    if (activeFilter === "discount") return Boolean(product.discount);
-    if (activeFilter === "credit") return product.price >= 300;
-    if (activeFilter === "cashback") return product.price >= 100;
-    return true;
-  });
-
-  filteredProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "priceAsc") return a.price - b.price;
-    if (sortBy === "priceDesc") return b.price - a.price;
-    if (sortBy === "discount") return (b.discount || 0) - (a.discount || 0);
-    return a.id - b.id;
-  });
-
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
+  const categoryInfo = useMemo(
+    () => ({
+      smartphones: {
+        title: t("categories.smartphones"),
+        text: t("productCategoryText.smartphones"),
+        tags: ["Apple", "Samsung", "Xiaomi", "Google Pixel"],
+      },
+      headphones: {
+        title: t("categories.headphones"),
+        text: t("productCategoryText.headphones"),
+        tags: ["AirPods", "Sony", "JBL", "Hi-Res"],
+      },
+      smartwatches: {
+        title: t("categories.smartwatches"),
+        text: t("productCategoryText.smartwatches"),
+        tags: ["Apple Watch", "Galaxy Watch", "Garmin", "AMOLED"],
+      },
+      playstaions: {
+        title: t("categories.playstaions"),
+        text: t("productCategoryText.playstaions"),
+        tags: ["PlayStation", "Xbox", "Nintendo", "Bundles"],
+      },
+      tablets: {
+        title: t("categories.tablets"),
+        text: t("productCategoryText.tablets"),
+        tags: ["iPad", "Samsung Tab", "Stylus", "LTE"],
+      },
+      laptops: {
+        title: t("categories.laptops"),
+        text: t("productCategoryText.laptops"),
+        tags: ["MacBook", "Gaming", "OLED", "16GB RAM"],
+      },
+      cameras: {
+        title: t("categories.cameras"),
+        text: t("productCategoryText.cameras"),
+        tags: ["Canon", "Sony", "4K", "Kit lens"],
+      },
+    }),
+    [t]
   );
 
-  // Вычисляем общее количество страниц
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const currentCategory = useMemo(
+    () =>
+      categoryInfo[category] || {
+        title: t("catalog"),
+        text: t("productList.catalogText"),
+        tags: t("productList.defaultTags").split(";"),
+      },
+    [category, categoryInfo, t]
+  );
 
-  // Функция для изменения страницы
-  const handlePageChange = (pageNumber) => {
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, activeFilter, sortBy, query]);
+
+  const productFilters = useMemo(
+    () => [
+      { id: "all", label: t("productList.all") },
+      { id: "discount", label: t("productList.discount") },
+      { id: "credit", label: t("productList.credit") },
+      { id: "cashback", label: t("productList.cashback") },
+    ],
+    [t]
+  );
+
+  const filteredProducts = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    const visibleProducts = products
+      .filter((product) => {
+        const matchesCategory = category ? product.category === category : true;
+        const matchesQuery = product.title.toLowerCase().includes(normalizedQuery);
+
+        return matchesCategory && matchesQuery;
+      })
+      .filter((product) => {
+        if (activeFilter === "discount") return Boolean(product.discount);
+        if (activeFilter === "credit") return product.price >= 300;
+        if (activeFilter === "cashback") return product.price >= 100;
+        return true;
+      });
+
+    return [...visibleProducts].sort((a, b) => {
+      if (sortBy === "priceAsc") return a.price - b.price;
+      if (sortBy === "priceDesc") return b.price - a.price;
+      if (sortBy === "discount") return (b.discount || 0) - (a.discount || 0);
+      return a.id - b.id;
+    });
+  }, [activeFilter, category, products, query, sortBy]);
+
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+  const currentProducts = useMemo(() => {
+    const indexOfLastProduct = currentPage * PRODUCTS_PER_PAGE;
+    const indexOfFirstProduct = indexOfLastProduct - PRODUCTS_PER_PAGE;
+
+    return filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  }, [currentPage, filteredProducts]);
+
+  const handlePageChange = useCallback((pageNumber) => {
     setCurrentPage(pageNumber);
-    // Прокручиваем вверх страницы при смене страницы
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  }, []);
 
-  // Функция для перехода на следующую страницу
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  };
+  }, [currentPage, totalPages]);
 
-  // Функция для перехода на предыдущую страницу
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  };
+  }, [currentPage]);
 
   return (
     <>
       {filteredProducts.length > 0 ? (
         <>
           <Breadcrumbs />
+          <section className={s.categoryHero}>
+            <div>
+              <span>MobileLend catalog</span>
+              <h1>{currentCategory.title}</h1>
+              <p>{currentCategory.text}</p>
+            </div>
+            <div className={s.categoryChips}>
+              {currentCategory.tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </div>
+          </section>
           <div className={s.toolbar}>
             <div className={s.filterGroup}>
               {productFilters.map((filter) => (
                 <button
                   key={filter.id}
-                  className={`${s.filterChip} ${
-                    activeFilter === filter.id ? s.activeChip : ""
-                  }`}
+                  className={cn(s.filterChip, {
+                    [s.activeChip]: activeFilter === filter.id,
+                  })}
                   type="button"
                   onClick={() => setActiveFilter(filter.id)}
                 >
@@ -113,40 +180,28 @@ function ProductList() {
               ))}
             </div>
             <label className={s.sortControl}>
-              <span>Сортировка</span>
+              <span>{t("productList.sort")}</span>
               <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="popular">Популярные</option>
-                <option value="priceAsc">Цена по возрастанию</option>
-                <option value="priceDesc">Цена по убыванию</option>
-                <option value="discount">Сначала скидки</option>
+                <option value="popular">{t("productList.popular")}</option>
+                <option value="priceAsc">{t("productList.priceAsc")}</option>
+                <option value="priceDesc">{t("productList.priceDesc")}</option>
+                <option value="discount">{t("productList.firstDiscounts")}</option>
               </select>
             </label>
           </div>
           <div className={s.pageInfo}>
             <div className={s.pageIndicator}>
-              Страница {currentPage} из {totalPages}
+              {t("commonPageOf", { current: currentPage, total: totalPages })}
             </div>
             <div className={s.productsCount}>
-              Показано {currentProducts.length} из {filteredProducts.length}{" "}
-              товаров
+              {t("commonShownOf", {
+                shown: currentProducts.length,
+                total: filteredProducts.length,
+              })}
             </div>
           </div>
 
-          <div className={s.root}>
-            {currentProducts.map((product) => (
-              <Product
-                key={product.id}
-                id={product.id}
-                imgUrl={product.imgUrl}
-                title={product.title}
-                desc={product.desc}
-                price={product.price}
-                currency={product.currency}
-                discount={product.discount}
-                category={product.category}
-              />
-            ))}
-          </div>
+          <ProductGrid products={currentProducts} />
 
           {totalPages > 1 && (
             <Pagination
@@ -159,9 +214,8 @@ function ProductList() {
           )}
         </>
       ) : (
-        <div className={s.emptyPage}>Страница пуста</div>
+        <div className={s.emptyPage}>{t("commonEmptyPage")}</div>
       )}
-      {/* Индикатор страницы и количества товаров */}
     </>
   );
 }

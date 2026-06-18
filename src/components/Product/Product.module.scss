@@ -31,12 +31,14 @@
   right: 14px;
   z-index: 2;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   pointer-events: none;
 }
 
 .discountBadge {
+  position: absolute;
+  left: 0;
   min-height: 30px;
   padding: 7px 10px;
   display: inline-flex;
@@ -58,9 +60,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: var(--button-radius-pill);
+  background: rgba(255, 255, 255, 0.84);
   color: #374151;
   cursor: pointer;
   pointer-events: auto;
@@ -200,6 +202,34 @@
   }
 }
 
+.compareBtn {
+  width: fit-content;
+  margin-top: 10px;
+  min-height: var(--button-height-sm);
+  padding: var(--button-padding-sm);
+  border: 1px solid var(--button-border);
+  border-radius: var(--button-radius-pill);
+  background: var(--button-bg);
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: color 0.18s, border-color 0.18s, background-color 0.18s, transform 0.18s;
+
+  &:hover {
+    transform: translateY(-1px);
+    color: var(--color-text);
+    border-color: var(--button-border-hover);
+    background: var(--button-bg-hover);
+  }
+}
+
+.compareBtnActive {
+  color: var(--button-primary-text);
+  border-color: transparent;
+  background: var(--button-primary-bg);
+}
+
 .priceAndBtn {
   margin-top: auto;
   padding-top: 18px;
@@ -240,8 +270,8 @@
 
 .cartBtn {
   min-width: 116px;
-  height: 42px;
-  border-radius: 14px;
+  height: var(--button-height-md);
+  border-radius: var(--button-radius);
 }
 
 @media (max-width: 560px) {

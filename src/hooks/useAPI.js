@@ -286,3 +286,74 @@ export const useFavorites = () => {
     clearError,
   };
 };
+
+export const useAuth = () => {
+  const { loading, error, execute, clearError } = useAPI();
+  const [user, setUser] = useState(null);
+
+  const getProfile = useCallback(async () => {
+    try {
+      const { userAPI } = await import("../services/api");
+      const data = await execute(userAPI.getProfile);
+      setUser(data);
+      return data;
+    } catch (err) {
+      console.error("Failed to fetch profile:", err);
+      throw err;
+    }
+  }, [execute]);
+
+  const login = useCallback(
+    async (credentials) => {
+      try {
+        const { userAPI } = await import("../services/api");
+        const data = await execute(userAPI.login, credentials);
+        setUser(data.user);
+        return data;
+      } catch (err) {
+        console.error("Failed to login:", err);
+        throw err;
+      }
+    },
+    [execute]
+  );
+
+  const register = useCallback(
+    async (credentials) => {
+      try {
+        const { userAPI } = await import("../services/api");
+        const data = await execute(userAPI.register, credentials);
+        setUser(data.user);
+        return data;
+      } catch (err) {
+        console.error("Failed to register:", err);
+        throw err;
+      }
+    },
+    [execute]
+  );
+
+  const logout = useCallback(async () => {
+    try {
+      const { userAPI } = await import("../services/api");
+      const data = await execute(userAPI.logout);
+      setUser(null);
+      return data;
+    } catch (err) {
+      console.error("Failed to logout:", err);
+      throw err;
+    }
+  }, [execute]);
+
+  return {
+    user,
+    isAuthenticated: Boolean(user),
+    loading,
+    error,
+    getProfile,
+    login,
+    register,
+    logout,
+    clearError,
+  };
+};

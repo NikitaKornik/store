@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import cn from "classnames";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { catalog } from "../../data/catalog";
 import Btn from "../UIkit/Btn/Btn";
 import s from "./Catalog.module.scss";
@@ -8,6 +9,7 @@ import { ReactComponent as ForwardSvg } from "../../assets/icons/forward.svg";
 import { ReactComponent as BackSvg } from "../../assets/icons/back.svg";
 
 function Catalog() {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(1);
   const [withTransition, setWithTransition] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -66,12 +68,12 @@ function Catalog() {
 
   return (
     <div className={s.root}>
-      <h4 className={s.title}>Категории</h4>
+      <h4 className={s.title}>{t("catalog")}</h4>
       <div className={s.slider}>
         <Btn
           className={cn(s.btn, s.btnBack)}
           onClick={() => scrollCatalog(-1)}
-          aria-label="Предыдущая категория"
+          aria-label={t("catalogPrev")}
         >
           <BackSvg />
         </Btn>
@@ -94,9 +96,17 @@ function Catalog() {
               >
                 <li className={s.catalogItem}>
                   <div className={s.imgContainer}>
-                    <img className={s.img} src={item.imgUrl} alt={item.name} />
+                    <img
+                      className={s.img}
+                      src={item.imgUrl}
+                      alt={t(`categories.${item.category}`, {
+                        defaultValue: item.name,
+                      })}
+                    />
                   </div>
-                  <div className={s.categoryName}>{item.name}</div>
+                  <div className={s.categoryName}>
+                    {t(`categories.${item.category}`, { defaultValue: item.name })}
+                  </div>
                 </li>
               </Link>
             ))}
@@ -105,7 +115,7 @@ function Catalog() {
         <Btn
           className={cn(s.btn, s.btnForward)}
           onClick={() => scrollCatalog(1)}
-          aria-label="Следующая категория"
+          aria-label={t("catalogNext")}
         >
           <ForwardSvg />
         </Btn>

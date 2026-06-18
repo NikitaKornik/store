@@ -33,7 +33,6 @@ const apiCall = async (operation, data = null, retryCount = 0) => {
 
     // Автоматические повторные попытки для сетевых ошибок
     if (error.message === "Network error" && retryCount < 2) {
-      console.log(`Retrying ${operation}... Attempt ${retryCount + 1}`);
       await new Promise((resolve) =>
         setTimeout(resolve, 1000 * (retryCount + 1))
       ); // Экспоненциальная задержка
@@ -139,15 +138,28 @@ export const cartAPI = {
     // Пока возвращаем мок данные из localStorage
     try {
       const cartData = localStorage.getItem("cart");
-      console.log("getCart: localStorage data:", cartData);
 
       if (cartData) {
         const parsedCart = JSON.parse(cartData);
-        console.log("getCart: parsed cart:", parsedCart);
-        return parsedCart;
+        const hydratedCart = parsedCart
+          .map((item) => {
+            const product = products.find((productItem) => productItem.id === item.id);
+
+            if (!product) {
+              return item;
+            }
+
+            return {
+              ...product,
+              quantity: item.quantity,
+            };
+          })
+          .filter(Boolean);
+
+        localStorage.setItem("cart", JSON.stringify(hydratedCart));
+        return hydratedCart;
       }
 
-      console.log("getCart: empty cart, returning []");
       return [];
     } catch (error) {
       console.error("getCart: error parsing localStorage:", error);
@@ -166,23 +178,14 @@ export const cartAPI = {
 
     // Пока работаем с localStorage
     try {
-      console.log(
-        "addToCart: adding product",
-        productId,
-        "quantity:",
-        quantity
-      );
-
       const cartData = localStorage.getItem("cart");
       let cart = cartData ? JSON.parse(cartData) : [];
-      console.log("addToCart: current cart:", cart);
 
       // Находим товар в списке продуктов
       const product = products.find((p) => p.id === productId);
       if (!product) {
         throw new Error("Товар не найден");
       }
-      console.log("addToCart: found product:", product);
 
       // Проверяем, есть ли уже такой товар в корзине
       const existingItemIndex = cart.findIndex((item) => item.id === productId);
@@ -190,20 +193,13 @@ export const cartAPI = {
       if (existingItemIndex !== -1) {
         // Если товар уже есть, увеличиваем количество
         cart[existingItemIndex].quantity += quantity;
-        console.log(
-          "addToCart: updated existing item, new quantity:",
-          cart[existingItemIndex].quantity
-        );
       } else {
         // Если товара нет, добавляем новый
         cart.push({
           ...product,
           quantity: quantity,
         });
-        console.log("addToCart: added new item to cart");
       }
-
-      console.log("addToCart: final cart:", cart);
 
       // Сохраняем в localStorage
       localStorage.setItem("cart", JSON.stringify(cart));
@@ -355,25 +351,115 @@ export const favoritesAPI = {
   },
 };
 
-// API для пользователей (для будущего использования)
+const AUTH_USERS_KEY = "authUsers";
+const AUTH_SESSION_KEY = "authSession";
+
+const demoUser = {
+  id: 1,
+  name: "Никита",
+  email: "nikita@mobilelend.test",
+  phone: "+373 60 78 22 23",
+  password: "123456",
+};
+
+const getAuthUsers = () => {
+  try {
+    const usersData = localStorage.getItem(AUTH_USERS_KEY);
+    const users = usersData ? JSON.parse(usersData) : [];
+
+    if (!users.some((user) => user.email === demoUser.email)) {
+      return [demoUser, ...users];
+    }
+
+    return users;
+  } catch (error) {
+    console.error("getAuthUsers: error parsing localStorage:", error);
+    return [demoUser];
+  }
+};
+
+const publicUser = (user) => {
+  const { password, ...safeUser } = user;
+  return safeUser;
+};
+
+// API для пользователей
 export const userAPI = {
   async login(credentials) {
-    // TODO: Заменить на реальный API вызов
-    return apiCall("login", { user: { id: 1, name: "Test User" } });
+    const email = credentials.email?.trim().toLowerCase();
+    const password = credentials.password?.trim();
+    const user = getAuthUsers().find(
+      (item) => item.email.toLowerCase() === email
+    );
+
+    if (!user || user.password !== password) {
+      throw new Error("Invalid credentials");
+    }
+
+    const session = {
+      token: `mock-token-${user.id}-${Date.now()}`,
+      user: publicUser(user),
+    };
+
+    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+
+    return apiCall("login", session);
+  },
+
+  async register(credentials) {
+    const name = credentials.name?.trim();
+    const email = credentials.email?.trim().toLowerCase();
+    const phone = credentials.phone?.trim();
+    const password = credentials.password?.trim();
+
+    if (!name || !email || !password) {
+      throw new Error("Required auth fields");
+    }
+
+    const users = getAuthUsers();
+
+    if (users.some((user) => user.email.toLowerCase() === email)) {
+      throw new Error("User already exists");
+    }
+
+    const user = {
+      id: Date.now(),
+      name,
+      email,
+      phone,
+      password,
+    };
+    const nextUsers = [...users.filter((item) => item.id !== demoUser.id), user];
+    const session = {
+      token: `mock-token-${user.id}-${Date.now()}`,
+      user: publicUser(user),
+    };
+
+    localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(nextUsers));
+    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+
+    return apiCall("register", session);
   },
 
   async logout() {
-    // TODO: Заменить на реальный API вызов
+    localStorage.removeItem(AUTH_SESSION_KEY);
     return apiCall("logout", { success: true });
   },
 
   async getProfile() {
-    // TODO: Заменить на реальный API вызов
-    return apiCall("getProfile", {
-      id: 1,
-      name: "Test User",
-      email: "test@example.com",
-    });
+    const sessionData = localStorage.getItem(AUTH_SESSION_KEY);
+
+    if (!sessionData) {
+      return apiCall("getProfile", null);
+    }
+
+    try {
+      const session = JSON.parse(sessionData);
+      return apiCall("getProfile", session.user || null);
+    } catch (error) {
+      localStorage.removeItem(AUTH_SESSION_KEY);
+      return apiCall("getProfile", null);
+    }
   },
 };
 
@@ -386,6 +472,15 @@ export const localApiUtils = {
     }
     if (error.message === "Product not found") {
       return "Продукт не найден.";
+    }
+    if (error.message === "Invalid credentials") {
+      return "Неверный email или пароль.";
+    }
+    if (error.message === "User already exists") {
+      return "Пользователь с таким email уже зарегистрирован.";
+    }
+    if (error.message === "Required auth fields") {
+      return "Заполните обязательные поля.";
     }
     return "Произошла ошибка. Попробуйте позже.";
   },

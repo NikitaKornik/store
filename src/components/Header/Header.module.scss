@@ -16,7 +16,10 @@
   z-index: 999;
   box-shadow: var(--shadow-panel);
   backdrop-filter: blur(18px);
-  transition: opacity 0.25s, transform 0.25s;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
 
   @include tablet {
     left: 310px;
@@ -25,24 +28,138 @@
   }
 }
 
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-18px);
+  visibility: hidden;
+}
+
 .svgContainer {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
+.headerIconButton {
+  position: relative;
+}
+
+.language {
+  position: relative;
+}
+
+.languageBtn {
+  min-width: 76px;
+  height: var(--button-height-md);
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--button-border);
+  border-radius: var(--button-radius-pill);
+  color: var(--color-text);
+  background: var(--button-bg);
+  cursor: pointer;
+  transition: background-color 0.18s, border-color 0.18s, transform 0.18s;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+  }
+
+  span {
+    font-size: 13px;
+    font-weight: 950;
+    letter-spacing: 0;
+  }
+
+  i {
+    margin-left: 1px;
+    color: var(--color-muted);
+    font-size: 14px;
+    font-style: normal;
+    line-height: 1;
+    transform: translateY(-1px);
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: var(--button-border-hover);
+    background: var(--button-bg-hover);
+  }
+}
+
+.languageMenu {
+  min-width: 170px;
+  padding: 8px;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1500;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: rgba(18, 22, 32, 0.96);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(18px);
+
+  button {
+    width: 100%;
+    min-height: var(--button-height-md);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid transparent;
+    border-radius: var(--button-radius);
+    color: var(--color-text);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-weight: 850;
+
+    &:hover {
+      border-color: var(--button-border);
+      background: var(--button-bg-hover);
+    }
+  }
+
+  span {
+    color: #c9ff57;
+    font-weight: 950;
+  }
+
+  strong {
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+}
+
+.activeLanguage {
+  border-color: transparent !important;
+  background: var(--button-primary-bg) !important;
+
+  span,
+  strong {
+    color: var(--button-primary-text);
+  }
+}
+
 .menuBtn {
-  width: 44px;
-  height: 44px;
+  width: var(--button-height-md);
+  height: var(--button-height-md);
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 5px;
-  border: 0;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--button-border);
+  border-radius: var(--button-radius);
+  background: var(--button-bg);
   color: var(--color-text);
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
@@ -56,7 +173,8 @@
 
   &:hover {
     transform: translateY(-1px);
-    background-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--button-border-hover);
+    background: var(--button-bg-hover);
   }
 
   @include tablet {

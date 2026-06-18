@@ -2,6 +2,22 @@ import React, { useState, useEffect } from "react";
 import cn from "classnames";
 import s from "./Btn.module.scss";
 
+const reductionBreakpoints = {
+  mobile: 380,
+  tablet_sm: 540,
+  tablet: 768,
+  desktop: 1024,
+  desktop_lg: 1440,
+};
+
+const canShowReducedText = (reduction) => {
+  if (!reduction || typeof window === "undefined") {
+    return true;
+  }
+
+  return window.innerWidth > (reductionBreakpoints[reduction] || 0);
+};
+
 function Btn({
   children,
   icon,
@@ -15,42 +31,24 @@ function Btn({
   className,
   ...props
 }) {
-  const [width, setWidth] = useState(window.innerWidth);
-  const [reductionWidth, setReductionWidth] = useState(window.innerWidth);
-  const [reductionChildren, setReductionChildren] = useState(false);
+  const [reductionChildren, setReductionChildren] = useState(() =>
+    canShowReducedText(reduction)
+  );
 
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-
-    switch (reduction) {
-      case "mobile":
-        setReductionWidth(380);
-        break;
-      case "tablet_sm":
-        setReductionWidth(540);
-        break;
-      case "tablet":
-        setReductionWidth(768);
-        break;
-      case "desktop":
-        setReductionWidth(1024);
-        break;
-      case "desktop_lg":
-        setReductionWidth(1440);
-        break;
-      default:
-        break;
-    }
-
-    if (width > reductionWidth) {
+    if (!reduction) {
       setReductionChildren(true);
-    } else {
-      setReductionChildren(false);
+      return undefined;
     }
 
+    const handleResize = () => {
+      setReductionChildren(canShowReducedText(reduction));
+    };
+
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [width, reductionWidth, reduction]);
+  }, [reduction]);
 
   return (
     <button

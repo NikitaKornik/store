@@ -1,0 +1,38 @@
+<svg width="720" height="192" viewBox="0 0 720 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="192" rx="48" fill="#101318"/>
+  <rect x="8" y="8" width="704" height="176" rx="42" fill="url(#panel)" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <g filter="url(#glow)">
+    <rect x="42" y="44" width="104" height="104" rx="28" fill="url(#mark)"/>
+    <path d="M74 126V68H91.6L106.4 101.2L121.2 68H138.8V126H123.2V94.3L111.1 121.1H101.7L89.6 94.3V126H74Z" fill="#101318"/>
+    <circle cx="128" cy="64" r="8" fill="#101318"/>
+  </g>
+  <text x="174" y="108" fill="#F7F8FB" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="850" letter-spacing="0">Mobile</text>
+  <text x="385" y="108" fill="#C9FF57" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="850" letter-spacing="0">Lend</text>
+  <text x="178" y="138" fill="#AAB3C5" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="4">TECH STORE</text>
+  <path d="M609 68H650C658.837 68 666 75.1634 666 84V108C666 116.837 658.837 124 650 124H609C600.163 124 593 116.837 593 108V84C593 75.1634 600.163 68 609 68Z" stroke="#C9FF57" stroke-width="6"/>
+  <path d="M617 84H642" stroke="#C9FF57" stroke-width="6" stroke-linecap="round"/>
+  <path d="M617 99H655" stroke="#F7F8FB" stroke-width="6" stroke-linecap="round"/>
+  <path d="M617 114H635" stroke="#F7F8FB" stroke-width="6" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="panel" x1="40" y1="20" x2="680" y2="176" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1A2030"/>
+      <stop offset="0.56" stop-color="#151923"/>
+      <stop offset="1" stop-color="#202622"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="44" y1="46" x2="144" y2="146" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C9FF57"/>
+      <stop offset="0.48" stop-color="#5DD8B2"/>
+      <stop offset="1" stop-color="#7C6DF2"/>
+    </linearGradient>
+    <filter id="glow" x="14" y="18" width="160" height="160" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="2"/>
+      <feGaussianBlur stdDeviation="14"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.788 0 0 0 0 1 0 0 0 0 0.341 0 0 0 0.32 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+</svg>

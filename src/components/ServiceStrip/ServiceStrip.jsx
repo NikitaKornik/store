@@ -1,22 +1,25 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import s from "./ServiceStrip.module.scss";
 
 const services = [
-  { title: "Доставка по стране", text: "Быстро до двери или в ближайший пункт" },
-  { title: "24 месяца гарантии", text: "Официальная поддержка и сервис" },
-  { title: "Проверка в магазине", text: "Заберите после теста и консультации" },
-  { title: "Бонусы за покупку", text: "Кэшбэк возвращается на следующие заказы" },
+  { titleKey: "deliveryTitle", textKey: "deliveryText" },
+  { titleKey: "warrantyTitle", textKey: "warrantyText" },
+  { titleKey: "checkTitle", textKey: "checkText" },
+  { titleKey: "bonusTitle", textKey: "bonusText" },
 ];
 
 function ServiceStrip() {
+  const { t } = useTranslation();
+
   return (
     <section className={s.root}>
       {services.map((service, index) => (
-        <div key={service.title} className={s.item}>
+        <div key={service.titleKey} className={s.item}>
           <span>{index + 1}</span>
           <div>
-            <h3>{service.title}</h3>
-            <p>{service.text}</p>
+            <h3>{t(service.titleKey)}</h3>
+            <p>{t(service.textKey)}</p>
           </div>
         </div>
       ))}

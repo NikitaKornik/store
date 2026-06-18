@@ -1,7 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { memo, useCallback, useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useCart } from "../../hooks/useAPI";
-import { CartContext, FavoritesContext } from "../../context/ContextProvider";
+import {
+  CartActionsContext,
+  CompareActionsContext,
+  FavoritesActionsContext,
+} from "../../context/ContextProvider";
+import { useIsCompared, useIsFavorite } from "../../context/selectionStores";
 import Btn from "../UIkit/Btn/Btn";
 import s from "./Product.module.scss";
 import { ReactComponent as ShoppingCartSvg } from "../../assets/icons/shoppingCart.svg";
@@ -17,37 +23,60 @@ function Product({
   id,
   category,
 }) {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
-  const { getCart } = useContext(CartContext);
-  const { favorites, toggleFavorite } = useContext(FavoritesContext);
+  const { getCart } = useContext(CartActionsContext);
+  const { toggleFavorite } = useContext(FavoritesActionsContext);
+  const { toggleCompare } = useContext(CompareActionsContext);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const isFavorite = favorites.some((item) => item.id === id);
+  const isFavorite = useIsFavorite(id);
+  const isCompared = useIsCompared(id);
+  const productPayload = useMemo(
+    () => ({
+      id,
+      category,
+      imgUrl,
+      title,
+      desc,
+      price,
+      currency,
+      discount,
+    }),
+    [category, currency, desc, discount, id, imgUrl, price, title]
+  );
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = useCallback(async () => {
     setIsAddingToCart(true);
     try {
       await addToCart(id, 1);
       await getCart();
-      // Можно добавить уведомление об успешном добавлении
-      console.log(`Товар "${title}" добавлен в корзину`);
     } catch (err) {
       console.error("Ошибка при добавлении в корзину:", err);
-      // Можно добавить уведомление об ошибке
     } finally {
       setIsAddingToCart(false);
     }
-  };
+  }, [addToCart, getCart, id]);
 
-  const handleFavoriteClick = async () => {
+  const handleFavoriteClick = useCallback(async () => {
     try {
       await toggleFavorite(id);
     } catch (err) {
       console.error("Ошибка при обновлении избранного:", err);
     }
-  };
+  }, [id, toggleFavorite]);
 
-  const currentPrice = discount ? Math.round(price * (1 - discount / 100)) : price;
-  const cashback = Math.max(5, Math.round(currentPrice * 0.03));
+  const handleCompareClick = useCallback(() => {
+    toggleCompare(productPayload);
+  }, [productPayload, toggleCompare]);
+
+  const currentPrice = useMemo(
+    () => (discount ? Math.round(price * (1 - discount / 100)) : price),
+    [discount, price]
+  );
+  const cashback = useMemo(
+    () => Math.max(5, Math.round(currentPrice * 0.03)),
+    [currentPrice]
+  );
 
   return (
     <div className={s.root}>
@@ -58,7 +87,9 @@ function Product({
           type="button"
           onClick={handleFavoriteClick}
           aria-label={
-            isFavorite ? "Удалить из избранного" : "Добавить в избранное"
+            isFavorite
+              ? t("productCard.removeFavorite")
+              : t("productCard.addFavorite")
           }
           aria-pressed={isFavorite}
         >
@@ -72,8 +103,8 @@ function Product({
       </Link>
       <div className={s.infoContainer}>
         <div className={s.metaRow}>
-          <span>{category}</span>
-          {discount && <span>неделя</span>}
+          <span>{t(`categories.${category}`, { defaultValue: category })}</span>
+          {discount && <span>{t("productCard.week")}</span>}
         </div>
         <div className={s.title}>
           <Link to={`/products/${category}/${id}`}>{title}</Link>
@@ -81,9 +112,16 @@ function Product({
 
         <div className={s.desc}>{desc}</div>
         <div className={s.benefits}>
-          <span>Кэшбэк {cashback} {currency}</span>
-          <span>Кредит 0 | 0 | 6</span>
+          <span>{t("productCard.cashback", { amount: cashback, currency })}</span>
+          <span>{t("productCard.credit")}</span>
         </div>
+        <button
+          className={`${s.compareBtn} ${isCompared ? s.compareBtnActive : ""}`}
+          type="button"
+          onClick={handleCompareClick}
+        >
+          {isCompared ? t("productCard.inCompare") : t("productCard.compare")}
+        </button>
         <div className={s.priceAndBtn}>
           <div className={s.priceContainer}>
             {discount && (
@@ -101,7 +139,7 @@ function Product({
             disable={isAddingToCart}
             className={s.cartBtn}
           >
-            {isAddingToCart ? "..." : "В корзину"}
+            {isAddingToCart ? "..." : t("productCard.addToCart")}
           </Btn>
         </div>
       </div>
@@ -109,4 +147,4 @@ function Product({
   );
 }
 
-export default Product;
+export default memo(Product);

@@ -1,84 +1,192 @@
-import { createContext, useState, useMemo, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useCart, useFavorites } from "../hooks/useAPI";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { useAuth, useCart, useFavorites } from "../hooks/useAPI";
+import { compareIdsStore, favoriteIdsStore } from "./selectionStores";
 
-export const CartContext = createContext(null);
-export const FavoritesContext = createContext(null);
+export const CartActionsContext = createContext(null);
+export const CartMetaContext = createContext(null);
+export const FavoritesDataContext = createContext(null);
+export const FavoritesActionsContext = createContext(null);
+export const FavoritesMetaContext = createContext(null);
+export const CompareDataContext = createContext(null);
+export const CompareActionsContext = createContext(null);
+export const CompareMetaContext = createContext(null);
 export const SearchContext = createContext(null);
-export const ProductContext = createContext(null);
+export const AuthContext = createContext(null);
 
 function ContextProvider({ children }) {
+  const {
+    user,
+    isAuthenticated,
+    getProfile,
+    login,
+    register,
+    logout,
+    loading: authLoading,
+    error: authError,
+    clearError: clearAuthError,
+  } = useAuth();
   const { cart, getCart } = useCart();
   const { favorites, getFavorites, toggleFavorite, removeFromFavorites } =
     useFavorites();
-  const [cartItemCount, setCartItemCount] = useState(0);
-  const [favoritesCount, setFavoritesCount] = useState(0);
+  const [compareItems, setCompareItems] = useState([]);
+  const cartItemCount = useMemo(
+    () => cart.reduce((sum, item) => sum + item.quantity, 0),
+    [cart]
+  );
+  const favoritesCount = useMemo(() => favorites.length, [favorites]);
 
   useEffect(() => {
+    getProfile();
     getCart();
     getFavorites();
-  }, [getCart, getFavorites]);
-
-  // Вычисляем общее количество товаров в корзине
-  useEffect(() => {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    setCartItemCount(totalItems);
-  }, [cart]);
+  }, [getProfile, getCart, getFavorites]);
 
   useEffect(() => {
-    setFavoritesCount(favorites.length);
+    favoriteIdsStore.setItems(favorites);
   }, [favorites]);
+
+  useEffect(() => {
+    compareIdsStore.setItems(compareItems);
+  }, [compareItems]);
+
+  useEffect(() => {
+    const savedCompare = localStorage.getItem("compare");
+    if (savedCompare) {
+      setCompareItems(JSON.parse(savedCompare));
+    }
+  }, []);
+
+  const toggleCompare = useCallback((product) => {
+    setCompareItems((currentItems) => {
+      const exists = currentItems.some((item) => item.id === product.id);
+      const nextItems = exists
+        ? currentItems.filter((item) => item.id !== product.id)
+        : [...currentItems, product].slice(-4);
+
+      localStorage.setItem("compare", JSON.stringify(nextItems));
+      return nextItems;
+    });
+  }, []);
+
+  const clearCompare = useCallback(() => {
+    localStorage.removeItem("compare");
+    setCompareItems([]);
+  }, []);
 
   const [query, setQuery] = useState("");
 
-  const [products, setProducts] = useState();
-  const location = useLocation();
+  const cartActionsContext = useMemo(
+    () => ({
+      getCart,
+    }),
+    [getCart]
+  );
 
-  useEffect(() => {
-    setProducts(location);
-  }, [location]);
+  const cartMetaContext = useMemo(
+    () => ({
+      cartItemCount,
+    }),
+    [cartItemCount]
+  );
 
-  const сartContext = useMemo(() => ({
-    cart,
-    getCart,
-    cartItemCount,
-    setCartItemCount,
-  }), [cart, getCart, cartItemCount]);
+  const searchContext = useMemo(
+    () => ({
+      query,
+      setQuery,
+    }),
+    [query]
+  );
 
-  const searchContext = useMemo(() => ({
-    query,
-    setQuery,
-  }), [query]);
+  const favoritesDataContext = useMemo(
+    () => ({
+      favorites,
+    }),
+    [favorites]
+  );
 
-  const favoritesContext = useMemo(() => ({
-    favorites,
-    getFavorites,
-    toggleFavorite,
-    removeFromFavorites,
-    favoritesCount,
-  }), [
-    favorites,
-    getFavorites,
-    toggleFavorite,
-    removeFromFavorites,
-    favoritesCount,
-  ]);
+  const favoritesActionsContext = useMemo(
+    () => ({
+      getFavorites,
+      toggleFavorite,
+      removeFromFavorites,
+    }),
+    [getFavorites, removeFromFavorites, toggleFavorite]
+  );
 
-  const productContext = useMemo(() => ({
-    products,
-    setProducts,
-  }), [products]);
+  const favoritesMetaContext = useMemo(
+    () => ({
+      favoritesCount,
+    }),
+    [favoritesCount]
+  );
+
+  const compareDataContext = useMemo(
+    () => ({
+      compareItems,
+    }),
+    [compareItems]
+  );
+
+  const compareActionsContext = useMemo(
+    () => ({
+      toggleCompare,
+      clearCompare,
+    }),
+    [clearCompare, toggleCompare]
+  );
+
+  const compareMetaContext = useMemo(
+    () => ({
+      compareCount: compareItems.length,
+    }),
+    [compareItems.length]
+  );
+
+  const authContext = useMemo(
+    () => ({
+      user,
+      isAuthenticated,
+      login,
+      register,
+      logout,
+      authLoading,
+      authError,
+      clearAuthError,
+    }),
+    [
+      user,
+      isAuthenticated,
+      login,
+      register,
+      logout,
+      authLoading,
+      authError,
+      clearAuthError,
+    ]
+  );
 
   return (
-    <CartContext.Provider value={сartContext}>
-      <FavoritesContext.Provider value={favoritesContext}>
-        <SearchContext.Provider value={searchContext}>
-          <ProductContext.Provider value={productContext}>
-            {children}
-          </ProductContext.Provider>
-        </SearchContext.Provider>
-      </FavoritesContext.Provider>
-    </CartContext.Provider>
+    <AuthContext.Provider value={authContext}>
+      <CartActionsContext.Provider value={cartActionsContext}>
+        <CartMetaContext.Provider value={cartMetaContext}>
+          <FavoritesDataContext.Provider value={favoritesDataContext}>
+            <FavoritesActionsContext.Provider value={favoritesActionsContext}>
+              <FavoritesMetaContext.Provider value={favoritesMetaContext}>
+                <CompareDataContext.Provider value={compareDataContext}>
+                  <CompareActionsContext.Provider value={compareActionsContext}>
+                    <CompareMetaContext.Provider value={compareMetaContext}>
+                      <SearchContext.Provider value={searchContext}>
+                        {children}
+                      </SearchContext.Provider>
+                    </CompareMetaContext.Provider>
+                  </CompareActionsContext.Provider>
+                </CompareDataContext.Provider>
+              </FavoritesMetaContext.Provider>
+            </FavoritesActionsContext.Provider>
+          </FavoritesDataContext.Provider>
+        </CartMetaContext.Provider>
+      </CartActionsContext.Provider>
+    </AuthContext.Provider>
   );
 }
 

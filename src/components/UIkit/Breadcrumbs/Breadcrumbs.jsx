@@ -11,26 +11,25 @@ function Breadcrumbs({ productPage = false }) {
       {pathnames.map((value, index) => {
         const to = "/" + pathnames.slice(0, index + 1).join("/");
         const isLast = index === pathnames.length - 1;
+        const productTitle = products.find(
+          (product) => product.id === Number(value)
+        )?.title;
 
         return isLast ? (
-          <>
+          <React.Fragment key={to}>
             {productPage ? (
-              <span className={s.active} key={to}>
-                {products[value - 1].title}
-              </span>
+              <span className={s.active}>{productTitle || value}</span>
             ) : (
-              <span className={s.active} key={to}>
-                {value}
-              </span>
+              <span className={s.active}>{value}</span>
             )}
-          </>
+          </React.Fragment>
         ) : (
-          <>
-            <Link key={to} to={to} style={{ textDecoration: "none" }}>
+          <React.Fragment key={to}>
+            <Link className={s.link} to={to}>
               {value}
             </Link>
             <div className={s.line}></div>
-          </>
+          </React.Fragment>
         );
       })}
     </nav>
