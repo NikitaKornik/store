@@ -10,44 +10,63 @@ body {
 }
 
 .hero {
-  min-height: 370px;
+  min-height: 430px;
   margin-bottom: 28px;
-  padding: 28px;
+  padding: 34px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr) minmax(150px, 0.28fr);
-  align-items: flex-end;
-  gap: 24px;
+  grid-template-columns: minmax(340px, 0.88fr) minmax(520px, 1.12fr);
+  grid-template-areas:
+    "content visual"
+    "content stats";
+  align-items: center;
+  gap: 22px 34px;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: 24px;
+  border-radius: 28px;
   background:
     linear-gradient(135deg, rgba(124, 109, 242, 0.22), rgba(52, 211, 153, 0.08)),
     var(--color-surface);
   box-shadow: var(--shadow-panel);
   position: relative;
 
+  &::before,
   &::after {
     content: "";
-    width: 360px;
-    height: 360px;
     position: absolute;
+    pointer-events: none;
+  }
+
+  &::before {
+    width: 58%;
+    height: 100%;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.1), transparent 34%),
+      linear-gradient(90deg, transparent, rgba(12, 26, 31, 0.56));
+  }
+
+  &::after {
+    width: 260px;
+    height: 260px;
     right: -120px;
-    top: -130px;
+    top: -112px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
   }
 }
 
 .heroContent {
-  max-width: 670px;
+  grid-area: content;
+  max-width: 610px;
   position: relative;
   z-index: 1;
 
   h1 {
     margin: 12px 0 14px;
-    max-width: 680px;
-    font-size: clamp(36px, 5vw, 64px);
-    line-height: 0.98;
+    max-width: 560px;
+    font-size: clamp(42px, 4.3vw, 62px);
+    line-height: 1.02;
     letter-spacing: 0;
   }
 
@@ -100,18 +119,19 @@ body {
 }
 
 .heroVisual {
+  grid-area: visual;
   position: relative;
   z-index: 1;
-  min-height: 270px;
+  min-height: 260px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: end;
-  gap: 12px;
+  gap: 14px;
 }
 
 .heroDevice {
-  min-height: 245px;
-  padding: 14px;
+  min-height: 235px;
+  padding: 16px 14px 18px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -126,7 +146,7 @@ body {
   transition: transform 0.18s, border-color 0.18s;
 
   &:nth-child(2) {
-    min-height: 290px;
+    min-height: 270px;
   }
 
   &:hover {
@@ -136,13 +156,15 @@ body {
 
   img {
     width: 100%;
-    height: 170px;
+    height: 142px;
     object-fit: contain;
   }
 
   span {
-    margin-top: 10px;
-    font-size: 13px;
+    max-width: 160px;
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.15;
     font-weight: 900;
     text-align: center;
   }
@@ -160,15 +182,18 @@ body {
 }
 
 .heroStats {
+  grid-area: stats;
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(2, minmax(90px, 1fr));
+  grid-template-columns: repeat(2, minmax(128px, 1fr));
+  justify-self: end;
+  width: min(100%, 340px);
   gap: 12px;
 
   div {
-    min-width: 100px;
-    padding: 14px;
+    min-width: 0;
+    padding: 16px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     background: rgba(8, 11, 17, 0.28);
@@ -180,7 +205,7 @@ body {
   }
 
   strong {
-    font-size: 23px;
+    font-size: 26px;
   }
 
   span {
@@ -481,6 +506,10 @@ body {
     min-height: auto;
     padding: 22px;
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "content"
+      "visual"
+      "stats";
   }
 
   .heroContent {
@@ -499,6 +528,11 @@ body {
   .mainDeal,
   .productStrip {
     grid-template-columns: 1fr;
+  }
+
+  .heroStats {
+    width: 100%;
+    justify-self: stretch;
   }
 
   .heroDevice,
@@ -520,6 +554,18 @@ body {
   .hero,
   .dealBoard {
     grid-template-columns: 1fr;
+  }
+
+  .hero {
+    grid-template-areas:
+      "content"
+      "visual"
+      "stats";
+  }
+
+  .heroStats {
+    width: 100%;
+    justify-self: stretch;
   }
 
   .categoryGrid {
